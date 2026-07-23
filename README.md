@@ -1,22 +1,22 @@
 # dubas.us
 
-Минималистичная визитная карточка художницы Тамилы Дубас.
+A minimalist digital business card for visual artist Tamila Dubas.
 
-## Локальная разработка
+## Local development
 
-Требуется Node.js 24.
+Node.js 24 is required.
 
 ```bash
 npm ci
 npm run dev -- --host 0.0.0.0
 ```
 
-Страница визитки доступна по адресу `/card`. Переход на `/` также открывает
-визитку через React Router.
+The digital business card is available at `/card`. Visiting `/` also opens the
+card through React Router.
 
-## Контент
+## Content
 
-Публичные данные находятся вне `src`:
+Public content is stored outside `src`:
 
 ```text
 content/
@@ -30,11 +30,11 @@ content/
         └── original.svg
 ```
 
-Во время разработки контент доступен по `/content/*`. Сборка создаёт
-адаптивные WebP-варианты портрета и копирует публичный контент в
-`dist/content/*`.
+During development, content is served from `/content/*`. The production build
+generates responsive WebP variants of the portrait and copies public content
+to `dist/content/*`.
 
-## Проверка
+## Verification
 
 ```bash
 npm run lint
@@ -42,4 +42,4 @@ npm run build
 npm run test:performance
 ```
 
-Push в ветку `main` запускает публикацию `dist` через GitHub Pages.
+Pushing to `main` deploys `dist` through GitHub Pages.
