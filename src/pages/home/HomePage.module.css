@@ -1,0 +1,175 @@
+.page {
+  display: flex;
+  min-height: 100svh;
+  padding: clamp(230px, 34svh, 360px) 0 48px;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    linear-gradient(to bottom, var(--muted), transparent 22svh),
+    radial-gradient(
+      circle at 18% 9%,
+      color-mix(in srgb, var(--background) 84%, transparent),
+      transparent 26%
+    ),
+    linear-gradient(135deg, var(--muted), var(--background));
+}
+
+.profileCard {
+  position: relative;
+  display: flex;
+  width: min(100%, 900px);
+  min-height: clamp(760px, calc(100svh - 380px), 1240px);
+  padding: 126px clamp(28px, 7vw, 86px) 54px;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 58px;
+  color: var(--card-foreground);
+  background: var(--card);
+  box-shadow: 0 28px 80px
+    color-mix(in srgb, var(--foreground) 13%, transparent);
+}
+
+.portrait {
+  position: absolute;
+  top: -96px;
+  left: 50%;
+  width: 192px;
+  height: 192px;
+  transform: translateX(-50%);
+  box-shadow: 0 16px 40px
+    color-mix(in srgb, var(--foreground) 18%, transparent);
+}
+
+.portraitImage {
+  object-position: 52% 32%;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.identity h1 {
+  width: min(100%, 610px);
+  margin: 0;
+}
+
+.signature {
+  width: 100%;
+  height: auto;
+}
+
+.identity p {
+  margin: 22px 0 0;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+}
+
+.links {
+  width: min(100%, 510px);
+  margin-top: 58px;
+}
+
+.linkList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 14px;
+  list-style: none;
+}
+
+.linkItem {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.linkItem a {
+  text-decoration: none;
+}
+
+.handle {
+  margin: auto 0 0;
+  padding-top: 42px;
+  color: var(--foreground);
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 640px) {
+  .page {
+    height: 100svh;
+    height: 100dvh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding: clamp(100px, 20svh, 172px) 0 0;
+    overscroll-behavior: none;
+    background:
+      linear-gradient(
+        to top,
+        var(--muted) 0,
+        var(--muted) 64px,
+        transparent 112px
+      ),
+      linear-gradient(to bottom, var(--muted), transparent 22svh),
+      radial-gradient(
+        circle at 18% 9%,
+        color-mix(in srgb, var(--background) 84%, transparent),
+        transparent 26%
+      ),
+      linear-gradient(135deg, var(--muted), var(--background));
+  }
+
+  .profileCard {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding:
+      clamp(52px, 8svh, 68px)
+      24px
+      max(clamp(18px, 3svh, 26px), calc(env(safe-area-inset-bottom) + 14px));
+    border-radius: clamp(32px, 10vw, 42px);
+    box-shadow: 0 -18px 52px
+      color-mix(in srgb, var(--foreground) 10%, transparent);
+  }
+
+  .portrait {
+    top: calc(clamp(54px, 9svh, 70px) * -1);
+    width: clamp(108px, 18svh, 140px);
+    height: clamp(108px, 18svh, 140px);
+  }
+
+  .identity p {
+    margin-top: clamp(6px, 1.3svh, 12px);
+    font-size: clamp(0.58rem, 2.7vw, 0.7rem);
+    letter-spacing: 0.3em;
+  }
+
+  .links {
+    width: min(100%, 78vw);
+    margin-top: clamp(12px, 2.2svh, 20px);
+  }
+
+  .linkList {
+    gap: clamp(6px, 1svh, 9px);
+  }
+
+  .handle {
+    padding-top: clamp(12px, 2svh, 18px);
+    font-size: clamp(0.75rem, 3.5vw, 0.9rem);
+  }
+}
+
+@media (min-width: 1200px) {
+  .page {
+    padding-top: 290px;
+  }
+}

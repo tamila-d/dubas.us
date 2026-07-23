@@ -1,0 +1,36 @@
+:root {
+  --color-surface-muted: var(--muted);
+  --color-text: var(--foreground);
+  --color-text-muted: var(--muted-foreground);
+  --color-border-strong: var(--input);
+  --color-accent-strong: var(--foreground);
+  --color-accent-soft: var(--muted);
+
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --layout-reading-max: 46rem;
+  --layout-content-max: 74rem;
+  --layout-wide-max: 90rem;
+  --layout-max-width: var(--layout-content-max);
+  --page-gutter: clamp(1rem, 4vw, 3rem);
+  --page-block-start: clamp(3.5rem, 8vw, 8rem);
+  --page-block-end: clamp(4rem, 9vw, 9rem);
+  --section-gap: clamp(3rem, 7vw, 7rem);
+  --grid-gap: clamp(1rem, 2.4vw, 2rem);
+  --touch-target: 2.75rem;
+
+  --type-display: clamp(2.75rem, 8vw, 6.75rem);
+  --type-title: clamp(2rem, 5vw, 4.5rem);
+  --type-heading: clamp(1.35rem, 2.5vw, 2rem);
+  --type-body: clamp(1rem, 1.4vw, 1.125rem);
+  --type-caption: 0.8125rem;
+
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 64px;
+}

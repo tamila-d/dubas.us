@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "portrait",
+  "alt": "Tamila Dubas in her studio",
+  "width": 768,
+  "height": 768,
+  "original": {
+    "url": "/content/images/portrait/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 320,
+      "height": 320,
+      "sources": [
+        {
+          "url": "/content/images/portrait/320.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 640,
+      "sources": [
+        {
+          "url": "/content/images/portrait/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

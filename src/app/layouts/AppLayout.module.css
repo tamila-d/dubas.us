@@ -1,0 +1,16 @@
+.app {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  scroll-margin-top: 5rem;
+}
+
+.profileMain {
+  display: block;
+  width: 100%;
+}

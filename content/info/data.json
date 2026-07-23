@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "locale": "en",
+  "artist": {
+    "firstName": "Tamila",
+    "lastName": "Dubas",
+    "role": "visual artist",
+    "handle": "@tamilaillustrates"
+  },
+  "images": {
+    "portrait": "portrait",
+    "signature": "signature"
+  },
+  "links": {
+    "instagram": "https://www.instagram.com/tamilaillustrates"
+  }
+}

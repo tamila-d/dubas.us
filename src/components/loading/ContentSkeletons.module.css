@@ -1,0 +1,264 @@
+.status,
+.bootstrapStatus {
+  width: 100%;
+}
+
+.bootstrapStatus {
+  min-height: 100svh;
+}
+
+.page,
+.detail {
+  width: min(calc(100% - 32px), var(--layout-wide-max));
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 96px) 0;
+}
+
+.intro,
+.readingSection,
+.contactColumn {
+  display: grid;
+}
+
+.intro {
+  width: min(100%, 620px);
+  gap: var(--space-3);
+}
+
+.eyebrow {
+  width: 96px;
+  height: 12px;
+}
+
+.title {
+  width: min(78vw, 420px);
+  height: clamp(38px, 6vw, 58px);
+}
+
+.copy {
+  width: min(88vw, 560px);
+  max-width: 100%;
+  height: 18px;
+}
+
+.copyShort {
+  width: min(64vw, 360px);
+  max-width: 100%;
+  height: 18px;
+}
+
+.readingSections {
+  display: grid;
+  width: min(100%, var(--layout-reading-max));
+  margin-top: clamp(40px, 7vw, 72px);
+  gap: clamp(32px, 5vw, 56px);
+}
+
+.readingSection,
+.contactColumn {
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  width: min(48vw, 14rem);
+  height: 24px;
+}
+
+.filterSkeletons {
+  display: flex;
+  margin-top: clamp(32px, 5vw, 56px);
+  overflow: hidden;
+  gap: var(--space-2);
+}
+
+.filter {
+  width: clamp(5rem, 16vw, 8rem);
+  height: var(--touch-target);
+  flex: 0 0 auto;
+  border-radius: var(--radius-lg);
+}
+
+.grid {
+  display: grid;
+  margin-top: clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 40px);
+}
+
+.card {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.media {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-xl);
+}
+
+.cardLine {
+  width: 72%;
+  height: 16px;
+}
+
+.cardMeta {
+  width: 44%;
+  height: 12px;
+}
+
+.detail {
+  display: grid;
+  gap: clamp(32px, 6vw, 72px);
+}
+
+.detailMedia {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xl);
+}
+
+.detailCopy {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.thankYou {
+  display: grid;
+  width: min(calc(100% - 32px), var(--layout-reading-max));
+  min-height: calc(100svh - 9rem);
+  margin: 0 auto;
+  align-content: center;
+  gap: var(--space-5);
+  padding-block: var(--page-block-start) var(--page-block-end);
+}
+
+.thankYouTitle {
+  width: min(80vw, 32rem);
+  height: clamp(48px, 8vw, 78px);
+}
+
+.thankYouAction {
+  width: 12rem;
+  height: var(--touch-target);
+  border-radius: var(--radius-lg);
+}
+
+.contactLayout {
+  display: grid;
+  margin-top: clamp(40px, 7vw, 72px);
+  gap: clamp(32px, 6vw, 64px);
+}
+
+.contactCard {
+  width: 100%;
+  height: 8rem;
+  border-radius: var(--radius-xl);
+}
+
+.contactForm {
+  width: 100%;
+  height: 32rem;
+  border-radius: var(--radius-xl);
+}
+
+.bootstrapHeader {
+  display: flex;
+  height: 4.0625rem;
+  padding-inline: max(var(--page-gutter), env(safe-area-inset-left));
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.bootstrapBrand {
+  width: 7rem;
+  height: 1rem;
+}
+
+.bootstrapNavigation {
+  width: min(38vw, 16rem);
+  height: 2rem;
+}
+
+.profileBootstrap {
+  display: flex;
+  height: 100svh;
+  padding-top: clamp(100px, 20svh, 172px);
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--muted);
+}
+
+.profileBootstrapCard {
+  position: relative;
+  display: grid;
+  width: min(100%, 900px);
+  height: 100%;
+  padding: clamp(52px, 8svh, 68px) 24px clamp(14px, 3svh, 24px);
+  align-content: start;
+  justify-items: center;
+  border-radius: clamp(32px, 10vw, 58px) clamp(32px, 10vw, 58px) 0 0;
+  background: var(--card);
+}
+
+.profilePortrait {
+  position: absolute;
+  top: calc(clamp(54px, 9svh, 70px) * -1);
+  width: clamp(108px, 18svh, 140px);
+  height: clamp(108px, 18svh, 140px);
+  border-radius: 999px;
+}
+
+.profileName {
+  width: min(76vw, 26rem);
+  height: clamp(48px, 12vw, 72px);
+}
+
+.profileRole {
+  width: 9rem;
+  height: 12px;
+  margin-top: var(--space-3);
+}
+
+.profileLinks {
+  display: grid;
+  width: min(78vw, 32rem);
+  margin-top: clamp(20px, 4svh, 52px);
+  gap: clamp(6px, 1svh, 12px);
+}
+
+.profileLink {
+  width: 100%;
+  height: clamp(40px, 7svh, 64px);
+  border-radius: var(--radius-xl);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .contactLayout {
+    grid-template-columns: minmax(15rem, 0.75fr) minmax(22rem, 1.25fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .detail {
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.7fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
