@@ -66,6 +66,14 @@ function pointerPoint(
   }
 }
 
+function touchPoint(touch: Touch): TrackedPointer {
+  return {
+    x: touch.clientX,
+    y: touch.clientY,
+    pointerType: 'touch',
+  }
+}
+
 function distance(left: ViewerPoint, right: ViewerPoint): number {
   return Math.hypot(left.x - right.x, left.y - right.y)
 }
@@ -90,7 +98,10 @@ export function useArtworkViewerGestures({
   const singleGestureRef = useRef<SinglePointerGesture | null>(null)
   const pinchGestureRef = useRef<PinchGesture | null>(null)
   const lastTapRef = useRef<TapRecord | null>(null)
+  const usingNativeTouchEventsRef = useRef(false)
   transformRef.current = transform
+  const imageWidth = imageSize.width
+  const imageHeight = imageSize.height
 
   const viewportSize = useCallback((): ViewerSize => {
     const rect = stageRef.current?.getBoundingClientRect()
@@ -112,11 +123,11 @@ export function useArtworkViewerGestures({
         requestedPan ?? transformRef.current,
         scale,
         viewportSize(),
-        imageSize,
+        { width: imageWidth, height: imageHeight },
       )
       return { scale, ...pan }
     },
-    [imageSize, viewportSize],
+    [imageHeight, imageWidth, viewportSize],
   )
 
   const pointFromStageCenter = useCallback(
@@ -217,8 +228,69 @@ export function useArtworkViewerGestures({
     }
   }, [])
 
+  const movePinchGesture = useCallback(() => {
+    if (pointersRef.current.size !== 2) {
+      return false
+    }
+    if (pinchGestureRef.current === null) {
+      startPinchGesture()
+      return false
+    }
+
+    const points = [...pointersRef.current.values()]
+    const pinch = pinchGestureRef.current
+    const currentMidpoint = midpoint(points[0], points[1])
+    const scale = clampViewerScale(
+      pinch.transform.scale *
+        (distance(points[0], points[1]) / pinch.distance),
+    )
+    const requestedPan = viewerPanForPinch(
+      pointFromStageCenter(pinch.midpoint),
+      pointFromStageCenter(currentMidpoint),
+      pinch.transform,
+      scale,
+    )
+    commitTransform(transformAtScale(scale, requestedPan))
+    return true
+  }, [
+    commitTransform,
+    pointFromStageCenter,
+    startPinchGesture,
+    transformAtScale,
+  ])
+
+  const moveSingleGesture = useCallback(
+    (pointerId: number, point: TrackedPointer) => {
+      const single = singleGestureRef.current
+      if (
+        pointersRef.current.size !== 1 ||
+        single?.pointerId !== pointerId ||
+        transformRef.current.scale <= VIEWER_MIN_SCALE
+      ) {
+        return false
+      }
+
+      const requestedPan = {
+        x: transformRef.current.x + (point.x - single.last.x),
+        y: transformRef.current.y + (point.y - single.last.y),
+      }
+      single.last = point
+      commitTransform(
+        transformAtScale(transformRef.current.scale, requestedPan),
+      )
+      return true
+    },
+    [commitTransform, transformAtScale],
+  )
+
   const onPointerDown = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
+      if (
+        event.pointerType === 'touch' &&
+        usingNativeTouchEventsRef.current
+      ) {
+        return
+      }
       if (event.pointerType === 'mouse' && event.button !== 0) {
         return
       }
@@ -242,6 +314,12 @@ export function useArtworkViewerGestures({
 
   const onPointerMove = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
+      if (
+        event.pointerType === 'touch' &&
+        usingNativeTouchEventsRef.current
+      ) {
+        return
+      }
       if (!pointersRef.current.has(event.pointerId)) {
         return
       }
@@ -249,43 +327,16 @@ export function useArtworkViewerGestures({
       const point = pointerPoint(event)
       pointersRef.current.set(event.pointerId, point)
 
-      if (pointersRef.current.size === 2 && pinchGestureRef.current !== null) {
+      if (movePinchGesture()) {
         event.preventDefault()
-        const points = [...pointersRef.current.values()]
-        const pinch = pinchGestureRef.current
-        const currentMidpoint = midpoint(points[0], points[1])
-        const scale = clampViewerScale(
-          pinch.transform.scale *
-            (distance(points[0], points[1]) / pinch.distance),
-        )
-        const requestedPan = viewerPanForPinch(
-          pointFromStageCenter(pinch.midpoint),
-          pointFromStageCenter(currentMidpoint),
-          pinch.transform,
-          scale,
-        )
-        commitTransform(transformAtScale(scale, requestedPan))
         return
       }
 
-      const single = singleGestureRef.current
-      if (
-        pointersRef.current.size === 1 &&
-        single?.pointerId === event.pointerId &&
-        transformRef.current.scale > VIEWER_MIN_SCALE
-      ) {
+      if (moveSingleGesture(event.pointerId, point)) {
         event.preventDefault()
-        const requestedPan = {
-          x: transformRef.current.x + (point.x - single.last.x),
-          y: transformRef.current.y + (point.y - single.last.y),
-        }
-        single.last = point
-        commitTransform(
-          transformAtScale(transformRef.current.scale, requestedPan),
-        )
       }
     },
-    [commitTransform, pointFromStageCenter, transformAtScale],
+    [movePinchGesture, moveSingleGesture],
   )
 
   const handleTouchTap = useCallback(
@@ -306,33 +357,206 @@ export function useArtworkViewerGestures({
     [toggleZoom],
   )
 
-  const endPointer = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>, cancelled: boolean) => {
+  const completeSingleGesture = useCallback(
+    (
+      pointerId: number,
+      point: TrackedPointer,
+      cancelled: boolean,
+    ) => {
       const single = singleGestureRef.current
-      const point = pointerPoint(event)
-
       if (
-        !cancelled &&
-        pointersRef.current.size === 1 &&
-        single?.pointerId === event.pointerId &&
-        transformRef.current.scale === VIEWER_MIN_SCALE
+        cancelled ||
+        pointersRef.current.size !== 1 ||
+        single?.pointerId !== pointerId ||
+        transformRef.current.scale !== VIEWER_MIN_SCALE
       ) {
-        const swipe = viewerSwipeDirection(
-          single.start,
-          point,
-          Date.now() - single.startedAt,
-        )
-        if (swipe === 'next') {
-          onNext()
-        } else if (swipe === 'previous') {
-          onPrevious()
-        } else if (
-          single.pointerType === 'touch' &&
-          distance(single.start, point) < 8
-        ) {
-          handleTouchTap(point)
+        return
+      }
+
+      const swipe = viewerSwipeDirection(
+        single.start,
+        point,
+        Date.now() - single.startedAt,
+      )
+      if (swipe === 'next') {
+        onNext()
+      } else if (swipe === 'previous') {
+        onPrevious()
+      } else if (
+        single.pointerType === 'touch' &&
+        distance(single.start, point) < 8
+      ) {
+        handleTouchTap(point)
+      }
+    },
+    [handleTouchTap, onNext, onPrevious],
+  )
+
+  useEffect(() => {
+    const stage = stageRef.current
+    if (stage === null || typeof TouchEvent === 'undefined') {
+      return
+    }
+
+    usingNativeTouchEventsRef.current = true
+
+    const syncTouches = (touches: TouchList) => {
+      pointersRef.current.clear()
+      for (let index = 0; index < Math.min(touches.length, 2); index += 1) {
+        const touch = touches.item(index)
+        if (touch !== null) {
+          pointersRef.current.set(touch.identifier, touchPoint(touch))
         }
       }
+    }
+
+    const handleTouchStart = (event: TouchEvent) => {
+      event.preventDefault()
+      syncTouches(event.touches)
+
+      const current = [...pointersRef.current.entries()]
+      if (current.length === 1) {
+        startSingleGesture(current[0][0], current[0][1])
+        pinchGestureRef.current = null
+      } else if (current.length === 2) {
+        startPinchGesture()
+      }
+    }
+
+    const handleTouchMove = (event: TouchEvent) => {
+      event.preventDefault()
+      syncTouches(event.touches)
+
+      if (movePinchGesture()) {
+        return
+      }
+
+      const current = [...pointersRef.current.entries()][0]
+      if (current !== undefined) {
+        moveSingleGesture(current[0], current[1])
+      }
+    }
+
+    const finishTouch = (event: TouchEvent, cancelled: boolean) => {
+      event.preventDefault()
+      const single = singleGestureRef.current
+      if (single !== null && pointersRef.current.size === 1) {
+        for (
+          let index = 0;
+          index < event.changedTouches.length;
+          index += 1
+        ) {
+          const touch = event.changedTouches.item(index)
+          if (touch?.identifier === single.pointerId) {
+            completeSingleGesture(
+              single.pointerId,
+              touchPoint(touch),
+              cancelled,
+            )
+            break
+          }
+        }
+      }
+
+      syncTouches(event.touches)
+      pinchGestureRef.current = null
+
+      const remaining = [...pointersRef.current.entries()][0]
+      if (remaining === undefined) {
+        singleGestureRef.current = null
+      } else {
+        startSingleGesture(remaining[0], remaining[1])
+      }
+    }
+
+    const handleTouchEnd = (event: TouchEvent) =>
+      finishTouch(event, false)
+    const handleTouchCancel = (event: TouchEvent) =>
+      finishTouch(event, true)
+    const preventNativeGesture = (event: Event) => event.preventDefault()
+    const listenerOptions: AddEventListenerOptions = { passive: false }
+
+    stage.addEventListener('touchstart', handleTouchStart, listenerOptions)
+    stage.addEventListener('touchmove', handleTouchMove, listenerOptions)
+    stage.addEventListener('touchend', handleTouchEnd, listenerOptions)
+    stage.addEventListener(
+      'touchcancel',
+      handleTouchCancel,
+      listenerOptions,
+    )
+    stage.addEventListener(
+      'gesturestart',
+      preventNativeGesture,
+      listenerOptions,
+    )
+    stage.addEventListener(
+      'gesturechange',
+      preventNativeGesture,
+      listenerOptions,
+    )
+    stage.addEventListener(
+      'gestureend',
+      preventNativeGesture,
+      listenerOptions,
+    )
+
+    return () => {
+      usingNativeTouchEventsRef.current = false
+      stage.removeEventListener(
+        'touchstart',
+        handleTouchStart,
+        listenerOptions,
+      )
+      stage.removeEventListener(
+        'touchmove',
+        handleTouchMove,
+        listenerOptions,
+      )
+      stage.removeEventListener(
+        'touchend',
+        handleTouchEnd,
+        listenerOptions,
+      )
+      stage.removeEventListener(
+        'touchcancel',
+        handleTouchCancel,
+        listenerOptions,
+      )
+      stage.removeEventListener(
+        'gesturestart',
+        preventNativeGesture,
+        listenerOptions,
+      )
+      stage.removeEventListener(
+        'gesturechange',
+        preventNativeGesture,
+        listenerOptions,
+      )
+      stage.removeEventListener(
+        'gestureend',
+        preventNativeGesture,
+        listenerOptions,
+      )
+    }
+  }, [
+    completeSingleGesture,
+    movePinchGesture,
+    moveSingleGesture,
+    startPinchGesture,
+    startSingleGesture,
+  ])
+
+  const endPointer = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>, cancelled: boolean) => {
+      if (
+        event.pointerType === 'touch' &&
+        usingNativeTouchEventsRef.current
+      ) {
+        return
+      }
+      const point = pointerPoint(event)
+
+      completeSingleGesture(event.pointerId, point, cancelled)
 
       pointersRef.current.delete(event.pointerId)
       pinchGestureRef.current = null
@@ -349,7 +573,7 @@ export function useArtworkViewerGestures({
         startSingleGesture(remaining[0], remaining[1])
       }
     },
-    [handleTouchTap, onNext, onPrevious, startSingleGesture],
+    [completeSingleGesture, startSingleGesture],
   )
 
   const onPointerUp = useCallback(

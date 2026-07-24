@@ -191,6 +191,8 @@ export function ArtworkViewer({
         onKeyDown={handleKeyDown}
         onPointerDownCapture={controls.revealControls}
         onPointerMoveCapture={controls.revealControls}
+        onTouchMoveCapture={controls.revealControls}
+        onTouchStartCapture={controls.revealControls}
         onWheel={(event) => {
           controls.revealControls()
           gestures.onWheel(event)
