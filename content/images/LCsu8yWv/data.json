@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "LCsu8yWv",
+  "alt": "Watercolor of a person resting on a park bench",
+  "width": 1110,
+  "height": 1535,
+  "original": {
+    "url": "/content/images/LCsu8yWv/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 221,
+      "sources": [
+        {
+          "url": "/content/images/LCsu8yWv/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 332,
+      "sources": [
+        {
+          "url": "/content/images/LCsu8yWv/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 664,
+      "sources": [
+        {
+          "url": "/content/images/LCsu8yWv/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 885,
+      "sources": [
+        {
+          "url": "/content/images/LCsu8yWv/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1328,
+      "sources": [
+        {
+          "url": "/content/images/LCsu8yWv/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

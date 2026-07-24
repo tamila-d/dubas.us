@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "FRP3sv9X",
+  "alt": "Watercolor city street beneath hospital skybridges",
+  "width": 1351,
+  "height": 1950,
+  "original": {
+    "url": "/content/images/FRP3sv9X/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 231,
+      "sources": [
+        {
+          "url": "/content/images/FRP3sv9X/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 346,
+      "sources": [
+        {
+          "url": "/content/images/FRP3sv9X/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 693,
+      "sources": [
+        {
+          "url": "/content/images/FRP3sv9X/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 924,
+      "sources": [
+        {
+          "url": "/content/images/FRP3sv9X/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1386,
+      "sources": [
+        {
+          "url": "/content/images/FRP3sv9X/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1848,
+      "sources": [
+        {
+          "url": "/content/images/FRP3sv9X/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

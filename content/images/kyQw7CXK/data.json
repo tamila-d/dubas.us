@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "kyQw7CXK",
+  "alt": "Watercolor portrait of a gray dog",
+  "width": 2670,
+  "height": 2906,
+  "original": {
+    "url": "/content/images/kyQw7CXK/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 174,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 261,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 522,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 697,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1045,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1393,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 2090,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/1920.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 2560,
+      "height": 2786,
+      "sources": [
+        {
+          "url": "/content/images/kyQw7CXK/2560.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

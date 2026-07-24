@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "A2SoVKNn",
+  "title": "Holiday on the Corner",
+  "description": "A festive red-brick building and a passing yellow taxi capture the warmth and movement of a city holiday.",
+  "location": "Rolf’s, New York",
+  "createdAt": "2024-12-03",
+  "type": "places",
+  "image": "A2SoVKNn",
+  "crop": {
+    "x": 0,
+    "y": 384,
+    "size": 1499
+  },
+  "coordinates": {
+    "latitude": 40.737989,
+    "longitude": -73.983522
+  }
+}

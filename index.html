@@ -4,11 +4,38 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f5f5f5" />
+    <meta name="theme-color" content="#ffffff" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
+    <script>
+      (() => {
+        let path = window.location.pathname.replace(/\/+$/, '') || '/'
+
+        if (path === '/') {
+          const mobileHint = navigator.userAgentData?.mobile
+          const phone =
+            mobileHint === true ||
+            (mobileHint === undefined &&
+              /Android.*Mobile|iPhone|iPod|IEMobile|Windows Phone|webOS|BlackBerry|Opera Mini|Mobi/i.test(
+                navigator.userAgent,
+              ))
+
+          path = phone ? '/card' : '/portfolio'
+        }
+
+        const color = path === '/card' ? '#f5f5f5' : '#ffffff'
+
+        document.documentElement.style.setProperty(
+          '--app-boot-background',
+          color,
+        )
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', color)
+      })()
+    </script>
     <style>
       #app-boot {
         position: fixed;
@@ -16,7 +43,7 @@
         z-index: 9999;
         display: grid;
         place-items: center;
-        background: #f5f5f5;
+        background: var(--app-boot-background, #ffffff);
         transition: opacity 360ms ease;
       }
       #app-boot::after {

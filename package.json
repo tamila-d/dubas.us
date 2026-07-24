@@ -7,18 +7,21 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "npm run content:images && vite",
-    "build": "npm run content:images && npm run validate:content && tsc -b && vite build",
+    "dev": "npm run content:indexes && npm run content:images && vite",
+    "build": "npm run content:indexes && npm run content:images && npm run validate:content && tsc -b && vite build",
     "docker:run": "./scripts/run-docker-with-secrets.sh",
     "lint": "oxlint src scripts",
     "preview": "vite preview",
     "preview:static": "tsx scripts/serve-static.ts",
     "test:content-clients": "tsx scripts/content/test-content-clients.ts",
     "test:content-http": "tsx scripts/content/test-content-http.ts",
+    "test:contact-vcard": "tsx scripts/content/test-contact-vcard.ts",
+    "test:entry-route": "tsx scripts/content/test-entry-route.ts",
     "test:images": "tsx scripts/content/test-image-pipeline.ts",
     "test:local-acceptance": "tsx scripts/content/test-local-acceptance.ts",
     "test:performance": "tsx scripts/content/test-performance-budget.ts",
     "test:static-artifact": "tsx scripts/content/test-static-artifact.ts",
+    "content:indexes": "tsx scripts/content/generate-portfolio-index.ts",
     "content:images": "tsx scripts/content/generate-images.ts",
     "validate:content": "tsx scripts/content/validate-content.ts"
   },

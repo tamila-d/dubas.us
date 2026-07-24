@@ -13,12 +13,25 @@ function routeFile(outputRoot: string, route: string): string {
 }
 
 export async function writeRouteShells(
-  _snapshot: ContentSnapshot,
+  snapshot: ContentSnapshot,
   outputRoot: string,
 ): Promise<RouteShellSummary> {
   const source = join(outputRoot, 'index.html')
   const html = await readFile(source, 'utf8')
-  const routes = [APP_ROUTES.card]
+  const routes = [
+    APP_ROUTES.card,
+    APP_ROUTES.contact,
+    APP_ROUTES.crop,
+    APP_ROUTES.portfolio,
+    ...Array.from(
+      snapshot.portfolio.keys(),
+      (id) => `${APP_ROUTES.portfolio}/${encodeURIComponent(id)}`,
+    ),
+    ...Array.from(
+      snapshot.portfolio.keys(),
+      (id) => `${APP_ROUTES.crop}/${encodeURIComponent(id)}`,
+    ),
+  ]
   const htmlFiles = routes.map((route) => routeFile(outputRoot, route))
 
   for (const file of htmlFiles) {

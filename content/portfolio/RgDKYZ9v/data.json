@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "RgDKYZ9v",
+  "title": "Neighborhood Kitchen",
+  "description": "A colorful corner restaurant sits beneath leafy branches, with two small tables waiting on the sidewalk.",
+  "location": "Dutch Baby, Washington Heights, New York",
+  "createdAt": "2024-04-21",
+  "type": "places",
+  "image": "RgDKYZ9v",
+  "crop": {
+    "x": 0,
+    "y": 454,
+    "size": 1350
+  },
+  "coordinates": {
+    "latitude": 40.855363,
+    "longitude": -73.937358
+  }
+}

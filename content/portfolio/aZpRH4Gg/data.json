@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "aZpRH4Gg",
+  "title": "Harbor at Sunset",
+  "description": "A working vessel rests in quiet blue water as soft coral and violet clouds gather over the harbor.",
+  "location": "Pier 86, Hudson River, New York",
+  "createdAt": "2025-06-02",
+  "type": "places",
+  "image": "aZpRH4Gg",
+  "crop": {
+    "x": 0,
+    "y": 272,
+    "size": 1500
+  },
+  "coordinates": {
+    "latitude": 40.765036,
+    "longitude": -74.000565
+  }
+}

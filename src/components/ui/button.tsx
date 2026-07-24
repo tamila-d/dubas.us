@@ -20,6 +20,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         profile:
           "border-transparent! bg-transparent text-inherit hover:bg-primary-foreground/10",
+        crop:
+          "border-background bg-primary text-primary-foreground hover:bg-primary/80",
       },
       size: {
         default:
@@ -33,8 +35,10 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        touch:
+          "h-(--touch-target) gap-1.5 px-4 has-data-[icon=inline-end]:pr-3.5 has-data-[icon=inline-start]:pl-3.5",
         profile:
-          "h-10 w-full rounded-xl! px-6 text-[0.68rem] font-medium tracking-[0.22em] uppercase min-[400px]:h-11 min-[400px]:text-xs sm:h-16 sm:px-8 sm:text-sm",
+          "h-11 w-full rounded-xl! px-6 text-[0.68rem] font-medium tracking-[0.22em] uppercase min-[400px]:text-xs sm:h-[clamp(2.75rem,6.4dvh,4rem)] sm:px-8 sm:text-sm",
       },
     },
     defaultVariants: {

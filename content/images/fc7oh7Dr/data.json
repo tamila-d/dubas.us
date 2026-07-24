@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "fc7oh7Dr",
+  "alt": "Watercolor of a red lighthouse on a rocky shore",
+  "width": 1361,
+  "height": 1958,
+  "original": {
+    "url": "/content/images/fc7oh7Dr/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 230,
+      "sources": [
+        {
+          "url": "/content/images/fc7oh7Dr/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 345,
+      "sources": [
+        {
+          "url": "/content/images/fc7oh7Dr/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 691,
+      "sources": [
+        {
+          "url": "/content/images/fc7oh7Dr/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 921,
+      "sources": [
+        {
+          "url": "/content/images/fc7oh7Dr/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1381,
+      "sources": [
+        {
+          "url": "/content/images/fc7oh7Dr/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1841,
+      "sources": [
+        {
+          "url": "/content/images/fc7oh7Dr/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

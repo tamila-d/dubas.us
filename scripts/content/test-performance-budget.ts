@@ -19,9 +19,15 @@ async function gzipSize(name: string): Promise<number> {
   return gzipSync(await readFile(join(assetsRoot, name))).byteLength
 }
 
-const entry = hashedAsset('index', '.js')
-const card = hashedAsset('HomePage', '.js')
 const entryHtml = await readFile(join(outputRoot, 'index.html'), 'utf8')
+const entryMatch = entryHtml.match(
+  /<script type="module"[^>]+src="\/assets\/([^"]+\.js)"/,
+)
+assert.ok(entryMatch, 'production HTML must reference the entry module')
+const entry = entryMatch[1]
+const card = hashedAsset('HomePage', '.js')
+const contact = hashedAsset('ContactInfoPage', '.js')
+const portfolio = hashedAsset('PortfolioPage', '.js')
 const entryText = await readFile(join(assetsRoot, entry), 'utf8')
 
 assert.ok(
@@ -32,10 +38,18 @@ assert.ok(
   (await gzipSize(card)) <= 10 * 1024,
   'Card route chunk must stay at or below 10 KiB gzip',
 )
+assert.ok(
+  (await gzipSize(contact)) <= 10 * 1024,
+  'Contact route chunk must stay at or below 10 KiB gzip',
+)
+assert.ok(
+  (await gzipSize(portfolio)) <= 10 * 1024,
+  'Portfolio route chunk must stay at or below 10 KiB gzip',
+)
 assert.doesNotMatch(
   entryText,
-  /PortfolioPage-|StorePage-|ArtworkViewer-/,
-  'unfinished catalog routes must not enter the Card bundle',
+  /StorePage-|ArtworkViewer-/,
+  'unfinished routes must not enter the shared application bundle',
 )
 assert.doesNotMatch(
   entryHtml,
@@ -59,17 +73,16 @@ assert.ok(
 )
 assert.ok(
   (await stat(
-    join(outputRoot, 'content/images/portrait/320.webp'),
+    join(outputRoot, 'content/images/portrait/240.webp'),
   )).size <= 10 * 1024,
-  '320 px portrait WebP must stay at or below 10 KiB',
+  '240 px portrait WebP must stay at or below 10 KiB',
 )
 assert.ok(
   (await stat(
-    join(outputRoot, 'content/images/portrait/640.webp'),
+    join(outputRoot, 'content/images/portrait/320.jpg'),
   )).size <= 25 * 1024,
-  '640 px portrait WebP must stay at or below 25 KiB',
+  'vCard portrait JPEG must stay at or below 25 KiB',
 )
-
 console.log(
   'Card performance budgets passed · ' +
     `${Math.round((await gzipSize(entry)) / 1024)} KiB entry gzip`,

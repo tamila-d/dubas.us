@@ -21,6 +21,11 @@
   min-width: 0;
 }
 
+.picture[data-crop] {
+  position: relative;
+  overflow: hidden;
+}
+
 .placeholder {
   z-index: 1;
   width: 100%;

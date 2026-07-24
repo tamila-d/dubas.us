@@ -19,6 +19,13 @@ import {
   validateInfoResource,
   type InfoResource,
 } from '../../src/content/info-resource.ts'
+import {
+  validatePortfolioCatalogResource,
+  validatePortfolioCropBounds,
+  validatePortfolioItemResource,
+  type PortfolioCatalogResource,
+  type PortfolioItemResource,
+} from '../../src/content/portfolio-resource.ts'
 
 const publicExtensions = new Set([
   '.avif',
@@ -51,6 +58,7 @@ export interface ContentSnapshot {
   root: string
   info: InfoResource
   images: Map<string, ImageResource>
+  portfolio: Map<string, PortfolioItemResource>
   indexJson: Record<string, string>
   publicFiles: Map<string, PublicContentFile>
 }
@@ -227,6 +235,90 @@ async function loadImages(
   return result
 }
 
+async function loadPortfolio(
+  root: string,
+  images: Map<string, ImageResource>,
+  catalog: PortfolioCatalogResource,
+): Promise<Map<string, PortfolioItemResource>> {
+  const portfolioRoot = join(root, 'portfolio')
+  const result = new Map<string, PortfolioItemResource>()
+  const resourceDirectories = new Set<string>()
+  let previousCreatedAt: string | undefined
+  let previousId: string | undefined
+
+  for (const entry of await readdir(portfolioRoot, { withFileTypes: true })) {
+    if (entry.name === 'data.json' && entry.isFile()) {
+      continue
+    }
+    if (!entry.isDirectory() || entry.name.startsWith('.')) {
+      throw new Error(
+        'Content portfolio may only contain data.json and resource folders',
+      )
+    }
+    resourceDirectories.add(entry.name)
+  }
+
+  for (const reference of catalog.items) {
+    if (!resourceDirectories.delete(reference.id)) {
+      throw new Error(
+        `Portfolio index references missing item ${reference.id}`,
+      )
+    }
+    const item = validatePortfolioItemResource(
+      await parseJsonFile(
+        join(portfolioRoot, reference.id, 'data.json'),
+      ),
+      reference.id,
+    )
+    if (item.type !== reference.group) {
+      throw new Error(
+        `Portfolio item ${item.id} must belong to group ` +
+          `"${reference.group}"`,
+      )
+    }
+    if (item.createdAt === null) {
+      throw new Error(
+        `Portfolio item ${item.id} needs createdAt before indexing`,
+      )
+    }
+    if (
+      previousCreatedAt !== undefined &&
+      (item.createdAt > previousCreatedAt ||
+        (item.createdAt === previousCreatedAt &&
+          previousId !== undefined &&
+          previousId.localeCompare(item.id) > 0))
+    ) {
+      throw new Error(
+        'Portfolio index must be sorted by createdAt newest first',
+      )
+    }
+    const image = images.get(item.image)
+    if (image === undefined) {
+      throw new Error(
+        `Portfolio item ${item.id} references missing image ${item.image}`,
+      )
+    }
+    validatePortfolioCropBounds(
+      item.crop,
+      image.width,
+      image.height,
+      `Portfolio item ${item.id} crop`,
+    )
+    previousCreatedAt = item.createdAt
+    previousId = item.id
+    result.set(item.id, item)
+  }
+
+  if (resourceDirectories.size > 0) {
+    throw new Error(
+      'Portfolio index is missing items: ' +
+        [...resourceDirectories].sort().join(', '),
+    )
+  }
+
+  return result
+}
+
 function validateInfoReferences(
   info: InfoResource,
   images: Map<string, ImageResource>,
@@ -254,11 +346,20 @@ export async function scanContent(
   )
   const images = await loadImages(root, publicFiles)
   validateInfoReferences(info, images)
+  const portfolioCatalog = validatePortfolioCatalogResource(
+    await parseJsonFile(join(root, 'portfolio/data.json')),
+  )
+  const portfolio = await loadPortfolio(
+    root,
+    images,
+    portfolioCatalog,
+  )
 
   return {
     root,
     info,
     images,
+    portfolio,
     indexJson: {},
     publicFiles,
   }
@@ -306,15 +407,23 @@ export async function writeContentArtifact(
   }
 
   const outputFiles = await listFiles(destination)
-  if (outputFiles.size !== snapshot.publicFiles.size) {
+  const expectedFileCount =
+    snapshot.publicFiles.size + Object.keys(snapshot.indexJson).length
+  if (outputFiles.size !== expectedFileCount) {
     throw new Error(
-      `Content artifact expected ${snapshot.publicFiles.size} files, ` +
+      `Content artifact expected ${expectedFileCount} files, ` +
         `but received ${outputFiles.size}`,
     )
   }
   for (const file of snapshot.publicFiles.values()) {
     if (outputFiles.get(file.relativePath) !== file.size) {
       throw new Error(`Content artifact differs: ${file.relativePath}`)
+    }
+  }
+  for (const [path, json] of Object.entries(snapshot.indexJson)) {
+    const size = outputFiles.get(path)
+    if (size !== Buffer.byteLength(json)) {
+      throw new Error(`Generated content artifact differs: ${path}`)
     }
   }
 }

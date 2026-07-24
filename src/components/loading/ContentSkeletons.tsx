@@ -24,13 +24,16 @@ function Status({
   )
 }
 
-function IntroSkeleton() {
+function IntroSkeleton({ description = true }: { description?: boolean }) {
   return (
     <div className={styles.intro}>
-      <Skeleton className={styles.eyebrow} />
       <Skeleton className={styles.title} />
-      <Skeleton className={styles.copy} />
-      <Skeleton className={styles.copyShort} />
+      {description ? (
+        <>
+          <Skeleton className={styles.copy} />
+          <Skeleton className={styles.copyShort} />
+        </>
+      ) : null}
     </div>
   )
 }
@@ -41,6 +44,21 @@ function CardSkeleton() {
       <Skeleton className={styles.media} />
       <Skeleton className={styles.cardLine} />
       <Skeleton className={styles.cardMeta} />
+    </div>
+  )
+}
+
+function ItemDetailSkeletonContent() {
+  return (
+    <div className={styles.detail}>
+      <Skeleton className={styles.detailMedia} />
+      <div className={styles.detailCopy}>
+        <Skeleton className={styles.eyebrow} />
+        <Skeleton className={styles.title} />
+        <Skeleton className={styles.copy} />
+        <Skeleton className={styles.copy} />
+        <Skeleton className={styles.copyShort} />
+      </div>
     </div>
   )
 }
@@ -68,7 +86,7 @@ export function CatalogPageSkeleton({ label }: SkeletonStatusProps) {
   return (
     <Status label={label}>
       <div className={styles.page}>
-        <IntroSkeleton />
+        <IntroSkeleton description={false} />
         <div className={styles.filterSkeletons}>
           {Array.from({ length: 4 }, (_, index) => (
             <Skeleton className={styles.filter} key={index} />
@@ -87,16 +105,7 @@ export function CatalogPageSkeleton({ label }: SkeletonStatusProps) {
 export function ItemDetailSkeleton({ label }: SkeletonStatusProps) {
   return (
     <Status label={label}>
-      <div className={styles.detail}>
-        <Skeleton className={styles.detailMedia} />
-        <div className={styles.detailCopy}>
-          <Skeleton className={styles.eyebrow} />
-          <Skeleton className={styles.title} />
-          <Skeleton className={styles.copy} />
-          <Skeleton className={styles.copy} />
-          <Skeleton className={styles.copyShort} />
-        </div>
-      </div>
+      <ItemDetailSkeletonContent />
     </Status>
   )
 }
@@ -141,7 +150,25 @@ export function ContactSkeleton({ label }: SkeletonStatusProps) {
 export function AppBootstrapSkeleton({
   label,
   profile,
-}: SkeletonStatusProps & { profile: boolean }) {
+  catalog = false,
+  crop = false,
+  detail = false,
+}: SkeletonStatusProps & {
+  profile: boolean
+  catalog?: boolean
+  crop?: boolean
+  detail?: boolean
+}) {
+  if (crop) {
+    return (
+      <Status className={styles.bootstrapStatus} label={label}>
+        <div className={styles.cropBootstrap}>
+          <Skeleton className={styles.cropBootstrapSquare} />
+        </div>
+      </Status>
+    )
+  }
+
   if (profile) {
     return (
       <Status className={styles.bootstrapStatus} label={label}>
@@ -167,9 +194,27 @@ export function AppBootstrapSkeleton({
         <Skeleton className={styles.bootstrapBrand} />
         <Skeleton className={styles.bootstrapNavigation} />
       </div>
-      <div className={styles.page}>
-        <IntroSkeleton />
-      </div>
+      {detail ? (
+        <ItemDetailSkeletonContent />
+      ) : (
+        <div className={styles.page}>
+          <IntroSkeleton description={!catalog} />
+          {catalog ? (
+            <>
+              <div className={styles.filterSkeletons}>
+                {Array.from({ length: 4 }, (_, index) => (
+                  <Skeleton className={styles.filter} key={index} />
+                ))}
+              </div>
+              <div className={styles.grid}>
+                {Array.from({ length: 8 }, (_, index) => (
+                  <CardSkeleton key={index} />
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
+      )}
     </Status>
   )
 }

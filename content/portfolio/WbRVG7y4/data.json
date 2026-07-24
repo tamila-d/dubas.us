@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "WbRVG7y4",
+  "title": "Friends by the Stream",
+  "description": "A girl and her tiger companion share a bright woodland moment beside a gently flowing stream.",
+  "location": "Fort Tryon Park, New York",
+  "createdAt": "2021-09-09",
+  "type": "illustrations",
+  "image": "WbRVG7y4",
+  "crop": {
+    "x": 0,
+    "y": 645,
+    "size": 2407
+  },
+  "coordinates": {
+    "latitude": 40.86181,
+    "longitude": -73.932387
+  }
+}

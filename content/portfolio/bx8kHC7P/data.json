@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "bx8kHC7P",
+  "title": "Morning at Buunni",
+  "description": "A welcoming neighborhood coffee shop is framed by plants, warm wood, and a cheerful yellow bench.",
+  "location": "Buunni Coffee, Washington Heights, New York",
+  "createdAt": "2020-07-24",
+  "type": "places",
+  "image": "bx8kHC7P",
+  "crop": {
+    "x": 0,
+    "y": 191,
+    "size": 1352
+  },
+  "coordinates": {
+    "latitude": 40.855175,
+    "longitude": -73.937734
+  }
+}

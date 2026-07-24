@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "FRP3sv9X",
+  "title": "Stay Amazing",
+  "description": "A lively city street stretches beneath an elevated passage, centered on a small message of encouragement.",
+  "location": "Columbia University Irving Medical Center, New York",
+  "createdAt": "2025-02-11",
+  "type": "places",
+  "image": "FRP3sv9X",
+  "crop": {
+    "x": 0,
+    "y": 472,
+    "size": 1351
+  },
+  "coordinates": {
+    "latitude": 40.841984,
+    "longitude": -73.94369
+  }
+}

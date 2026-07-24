@@ -13,6 +13,11 @@ import {
   type ImageResourceSource,
   type ImageResourceVariant,
 } from '../../src/content/image-resource.ts'
+import {
+  IMAGE_BYTE_BUDGETS,
+  widthsForTier,
+  type ImageTierName,
+} from '../../src/content/images.ts'
 
 const generatedFilePattern = /^\d+\.(?:avif|jpg|webp)$/
 
@@ -95,6 +100,23 @@ function encode(
   throw new Error(`SVG is not a generated raster format`)
 }
 
+function byteBudget(
+  sourceWidth: number,
+  variantWidth: number,
+): number {
+  const tiers = (
+    Object.keys(IMAGE_BYTE_BUDGETS) as ImageTierName[]
+  ).filter((tier) =>
+    widthsForTier(sourceWidth, tier).includes(variantWidth),
+  )
+  if (tiers.length === 0) {
+    throw new Error(
+      `Image variant ${variantWidth} does not belong to a responsive tier`,
+    )
+  }
+  return Math.min(...tiers.map((tier) => IMAGE_BYTE_BUDGETS[tier]))
+}
+
 async function removeStaleOutputs(
   directory: string,
   expectedPaths: ReadonlySet<string>,
@@ -141,9 +163,11 @@ async function generateJob(job: ImageJob): Promise<number> {
         })
       await encode(resized, candidate.type).toFile(path)
       const outputStat = await stat(path)
-      if (outputStat.size > 350_000) {
+      const budget = byteBudget(job.image.width, variant.width)
+      if (outputStat.size > budget) {
         throw new Error(
-          `Image ${job.image.id} variant ${variant.width} exceeds 350 KB`,
+          `Image ${job.image.id} variant ${variant.width} exceeds ` +
+            `${Math.round(budget / 1000)} KB`,
         )
       }
     }),

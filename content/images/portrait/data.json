@@ -10,22 +10,32 @@
   },
   "variants": [
     {
-      "width": 320,
-      "height": 320,
+      "width": 160,
+      "height": 160,
       "sources": [
         {
-          "url": "/content/images/portrait/320.webp",
+          "url": "/content/images/portrait/160.webp",
           "type": "image/webp"
         }
       ]
     },
     {
-      "width": 640,
-      "height": 640,
+      "width": 240,
+      "height": 240,
       "sources": [
         {
-          "url": "/content/images/portrait/640.webp",
+          "url": "/content/images/portrait/240.webp",
           "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 320,
+      "sources": [
+        {
+          "url": "/content/images/portrait/320.jpg",
+          "type": "image/jpeg"
         }
       ]
     }

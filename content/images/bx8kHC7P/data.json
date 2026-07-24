@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "bx8kHC7P",
+  "alt": "Watercolor of the Buunni Coffee storefront",
+  "width": 1352,
+  "height": 1557,
+  "original": {
+    "url": "/content/images/bx8kHC7P/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 184,
+      "sources": [
+        {
+          "url": "/content/images/bx8kHC7P/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 276,
+      "sources": [
+        {
+          "url": "/content/images/bx8kHC7P/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 553,
+      "sources": [
+        {
+          "url": "/content/images/bx8kHC7P/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 737,
+      "sources": [
+        {
+          "url": "/content/images/bx8kHC7P/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1106,
+      "sources": [
+        {
+          "url": "/content/images/bx8kHC7P/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1474,
+      "sources": [
+        {
+          "url": "/content/images/bx8kHC7P/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

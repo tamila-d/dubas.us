@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "5mS2DBFs",
+  "title": "Among the Cypress Trees",
+  "description": "A historic church complex rises above lush greenery beneath a light blue sky, evoking the calm of an old European town.",
+  "location": "Abbazia di Sant’Antimo, Tuscany, Italy",
+  "createdAt": "2021-05-18",
+  "type": "places",
+  "image": "5mS2DBFs",
+  "crop": {
+    "x": 215,
+    "y": 0,
+    "size": 1493
+  },
+  "coordinates": {
+    "latitude": 42.99963,
+    "longitude": 11.515701
+  }
+}

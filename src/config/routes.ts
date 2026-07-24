@@ -1,9 +1,11 @@
 export const APP_ROUTES = {
   home: '/',
   card: '/card',
+  crop: '/crop',
+  cropItem: '/crop/:id',
   about: '/about',
   portfolio: '/portfolio',
-  portfolioItem: '/portfolio/:slug',
+  portfolioItem: '/portfolio/:id',
   store: '/store',
   storeItem: '/store/:slug',
   contact: '/contact',

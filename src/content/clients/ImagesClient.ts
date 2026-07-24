@@ -18,9 +18,9 @@ export class ImagesClient {
     id: string,
     options: ContentLoadOptions = {},
   ): Promise<ImageResource> {
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
+    if (!/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(id)) {
       throw new ImageResourceValidationError(
-        'Image id must be lowercase and URL-safe',
+        'Image id must be alphanumeric and URL-safe',
       )
     }
     const value = await this.contentClient.getJson(

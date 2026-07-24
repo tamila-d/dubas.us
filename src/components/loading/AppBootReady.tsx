@@ -53,7 +53,11 @@ async function appImagesReady(signal: AbortSignal): Promise<void> {
   )
 }
 
-export function AppBootReady() {
+export function AppBootReady({
+  waitForImages = true,
+}: {
+  waitForImages?: boolean
+} = {}) {
   useEffect(() => {
     const controller = new AbortController()
     const { signal } = controller
@@ -76,7 +80,9 @@ export function AppBootReady() {
             ]),
       ),
     )
-    const imagesReady = appImagesReady(signal)
+    const imagesReady = waitForImages
+      ? appImagesReady(signal)
+      : Promise.resolve()
     const fontsReady = stylesReady.then(() => document.fonts.ready)
 
     void Promise.all([
@@ -92,7 +98,7 @@ export function AppBootReady() {
       controller.abort()
       cancelReveal?.()
     }
-  }, [])
+  }, [waitForImages])
 
   return null
 }

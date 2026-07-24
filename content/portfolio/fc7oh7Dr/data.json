@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "fc7oh7Dr",
+  "title": "Guiding Light",
+  "description": "A red lighthouse stands firmly on the rocks, surrounded by open water and a luminous, windswept sky.",
+  "location": "Little Red Lighthouse, New York",
+  "createdAt": "2023-03-12",
+  "type": "places",
+  "image": "fc7oh7Dr",
+  "crop": {
+    "x": 0,
+    "y": 362,
+    "size": 1361
+  },
+  "coordinates": {
+    "latitude": 40.850258,
+    "longitude": -73.946963
+  }
+}

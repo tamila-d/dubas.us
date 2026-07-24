@@ -7,11 +7,16 @@
     "role": "visual artist",
     "handle": "@tamilaillustrates"
   },
+  "contact": {
+    "email": "art@dubas.us",
+    "phone": "+1 (646) 598-4538"
+  },
   "images": {
     "portrait": "portrait",
     "signature": "signature"
   },
   "links": {
-    "instagram": "https://www.instagram.com/tamilaillustrates"
+    "instagram": "https://www.instagram.com/tamilaillustrates",
+    "website": "https://dubas.us"
   }
 }

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "aZpRH4Gg",
+  "alt": "Watercolor of a working vessel in a sunset harbor",
+  "width": 1500,
+  "height": 2100,
+  "original": {
+    "url": "/content/images/aZpRH4Gg/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 224,
+      "sources": [
+        {
+          "url": "/content/images/aZpRH4Gg/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 336,
+      "sources": [
+        {
+          "url": "/content/images/aZpRH4Gg/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 672,
+      "sources": [
+        {
+          "url": "/content/images/aZpRH4Gg/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 896,
+      "sources": [
+        {
+          "url": "/content/images/aZpRH4Gg/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1344,
+      "sources": [
+        {
+          "url": "/content/images/aZpRH4Gg/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1792,
+      "sources": [
+        {
+          "url": "/content/images/aZpRH4Gg/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

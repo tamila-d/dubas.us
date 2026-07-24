@@ -18,6 +18,7 @@ AGENTS.md
 scripts/run-docker-with-secrets.sh
 content/**/images/generated/
 content/images/*/[0-9]*.webp
+content/images/*/[0-9]*.jpg
 
 # Editor directories and files
 .vscode/*

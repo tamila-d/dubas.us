@@ -10,7 +10,7 @@ const portraitDirectory = join(
   'images',
   'portrait',
 )
-const removedCandidate = join(portraitDirectory, '320.webp')
+const removedCandidate = join(portraitDirectory, '240.webp')
 const staleCandidate = join(portraitDirectory, '999.webp')
 const retiredCache = join(portraitDirectory, '.cache.json')
 
@@ -33,15 +33,57 @@ const portrait = snapshot.images.get('portrait')
 assert.ok(portrait)
 assert.deepEqual(
   portrait.variants.map((variant) => variant.width),
-  [320, 640],
+  [160, 240, 320],
+)
+assert.deepEqual(
+  portrait.variants.map((variant) => ({
+    width: variant.width,
+    types: variant.sources.map((source) => source.type).sort(),
+  })),
+  [
+    {
+      width: 160,
+      types: ['image/webp'],
+    },
+    {
+      width: 240,
+      types: ['image/webp'],
+    },
+    {
+      width: 320,
+      types: ['image/jpeg'],
+    },
+  ],
 )
 assert.ok(
   portrait.variants.every((variant) =>
-    variant.sources.length === 1 &&
-    variant.sources[0]?.type === 'image/webp' &&
-    variant.sources[0].url.startsWith('/content/images/portrait/'),
+    variant.sources.every((source) =>
+      source.url.startsWith('/content/images/portrait/'),
+    ),
   ),
 )
 await assert.rejects(() => access(retiredCache))
 
-console.log('Card image resource and responsive variant checks passed')
+for (const item of snapshot.portfolio.values()) {
+  const image = snapshot.images.get(item.image)
+  assert.ok(image)
+  assert.ok(
+    !image.variants.some((variant) => variant.width === 320),
+    `Portfolio image ${image.id} must not generate an unused 320 px variant`,
+  )
+}
+
+assert.deepEqual(
+  snapshot.images
+    .get('aZpRH4Gg')
+    ?.variants.map((variant) => variant.width),
+  [160, 240, 480, 640, 960, 1280],
+)
+assert.deepEqual(
+  snapshot.images
+    .get('kyQw7CXK')
+    ?.variants.map((variant) => variant.width),
+  [160, 240, 480, 640, 960, 1280, 1920, 2560],
+)
+
+console.log('Responsive image policy and generated variants passed')

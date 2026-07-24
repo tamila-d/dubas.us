@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "A2SoVKNn",
+  "alt": "Watercolor of a festive city building and yellow taxi",
+  "width": 1499,
+  "height": 2099,
+  "original": {
+    "url": "/content/images/A2SoVKNn/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 224,
+      "sources": [
+        {
+          "url": "/content/images/A2SoVKNn/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 336,
+      "sources": [
+        {
+          "url": "/content/images/A2SoVKNn/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 672,
+      "sources": [
+        {
+          "url": "/content/images/A2SoVKNn/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 896,
+      "sources": [
+        {
+          "url": "/content/images/A2SoVKNn/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1344,
+      "sources": [
+        {
+          "url": "/content/images/A2SoVKNn/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1792,
+      "sources": [
+        {
+          "url": "/content/images/A2SoVKNn/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

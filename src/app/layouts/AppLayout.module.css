@@ -7,10 +7,20 @@
 .main {
   display: flex;
   flex: 1;
+  min-width: 0;
   scroll-margin-top: 5rem;
+}
+
+.profileApp {
+  height: 100svh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .profileMain {
   display: block;
   width: 100%;
+  min-height: 0;
+  overflow: hidden;
 }

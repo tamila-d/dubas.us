@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "RgDKYZ9v",
+  "alt": "Watercolor of the Dutch Baby neighborhood restaurant",
+  "width": 1350,
+  "height": 1951,
+  "original": {
+    "url": "/content/images/RgDKYZ9v/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 231,
+      "sources": [
+        {
+          "url": "/content/images/RgDKYZ9v/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 347,
+      "sources": [
+        {
+          "url": "/content/images/RgDKYZ9v/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 694,
+      "sources": [
+        {
+          "url": "/content/images/RgDKYZ9v/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 925,
+      "sources": [
+        {
+          "url": "/content/images/RgDKYZ9v/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1387,
+      "sources": [
+        {
+          "url": "/content/images/RgDKYZ9v/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1850,
+      "sources": [
+        {
+          "url": "/content/images/RgDKYZ9v/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

@@ -28,7 +28,9 @@ const sourceFiles = (await filesUnder(contentRoot)).filter(
   (path) => path !== 'README.md',
 )
 const distFiles = await filesUnder(distContentRoot)
-assert.deepEqual(distFiles, sourceFiles)
+const generatedFiles = Object.keys(snapshot.indexJson)
+const expectedDistFiles = [...sourceFiles, ...generatedFiles].sort()
+assert.deepEqual(distFiles, expectedDistFiles)
 
 for (const path of sourceFiles) {
   assert.equal(
@@ -40,15 +42,19 @@ for (const path of sourceFiles) {
   )
 }
 
-assert.equal(snapshot.images.size, 2)
 assert.equal(snapshot.info.artist.firstName, 'Tamila')
 
-await assert.rejects(access(resolve('content/portfolio')))
+const portfolioIndex = JSON.parse(
+  await readFile(join(distContentRoot, 'portfolio/data.json'), 'utf8'),
+) as { items: unknown[] }
+assert.equal(snapshot.images.size, 16)
+assert.equal(snapshot.portfolio.size, 14)
+assert.equal(portfolioIndex.items.length, 14)
 await assert.rejects(access(resolve('content/store')))
 await assert.rejects(access(resolve('content/pages')))
 await assert.rejects(access(resolve('CNAME')))
 assert.equal((await stat(distContentRoot)).isDirectory(), true)
 
 console.log(
-  `Card-only content parity passed · ${distFiles.length} byte-identical files`,
+  `Static content parity passed · ${distFiles.length} byte-identical files`,
 )

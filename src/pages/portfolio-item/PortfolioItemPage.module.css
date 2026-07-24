@@ -1,0 +1,160 @@
+.page {
+  width: min(100%, var(--layout-wide-max));
+  margin-inline: auto;
+  padding:
+    var(--content-page-start)
+    var(--page-gutter)
+    max(72px, env(safe-area-inset-bottom));
+}
+
+.backRow {
+  margin-bottom: var(--content-page-start);
+}
+
+.layout {
+  display: grid;
+  min-width: 0;
+  gap: clamp(32px, 6vw, 72px);
+}
+
+.artworkSurface {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--muted);
+}
+
+.imageButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: clamp(8px, 1.5vw, 18px);
+}
+
+.picture,
+.image {
+  width: 100%;
+}
+
+.picture {
+  display: block;
+}
+
+.image {
+  height: auto;
+  max-height: min(72svh, 900px);
+  object-fit: contain;
+}
+
+.expandHint {
+  position: absolute;
+  right: clamp(16px, 2vw, 24px);
+  bottom: clamp(16px, 2vw, 24px);
+}
+
+.copy {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+}
+
+.type,
+.copy h1,
+.description,
+.metadata {
+  margin: 0;
+}
+
+.type {
+  color: var(--muted-foreground);
+  font-size: var(--type-caption);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.copy h1 {
+  max-width: 14ch;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.065em;
+  line-height: 0.98;
+}
+
+.description {
+  max-width: 56ch;
+  color: var(--muted-foreground);
+  font-size: var(--type-body);
+  line-height: 1.65;
+}
+
+.metadata {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.metadata div {
+  display: grid;
+  gap: 3px;
+}
+
+.metadata dt {
+  color: var(--muted-foreground);
+  font-size: var(--type-caption);
+}
+
+.metadata dd {
+  margin: 0;
+}
+
+.mapLink {
+  width: fit-content;
+  text-decoration: none;
+}
+
+:global([data-slot='dialog-content']).viewerFallback {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: clamp(16px, 3vw, 40px);
+  border-radius: 0;
+  background: var(--background);
+  transform: none;
+}
+
+.viewerFallbackPicture,
+.viewerFallbackImage {
+  width: 100%;
+  height: 100%;
+}
+
+.viewerFallbackPicture {
+  display: block;
+  min-height: 0;
+}
+
+.viewerFallbackImage {
+  object-fit: contain;
+}
+
+@media (min-width: 820px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.55fr);
+    align-items: start;
+  }
+
+  .copy {
+    position: sticky;
+    top: 96px;
+  }
+}
+
+@media (max-width: 639px) {
+  .backRow {
+    display: none;
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "5mS2DBFs",
+  "alt": "Watercolor of a historic abbey surrounded by trees",
+  "width": 2126,
+  "height": 1493,
+  "original": {
+    "url": "/content/images/5mS2DBFs/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 112,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 169,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 337,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 449,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 674,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 899,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 1348,
+      "sources": [
+        {
+          "url": "/content/images/5mS2DBFs/1920.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

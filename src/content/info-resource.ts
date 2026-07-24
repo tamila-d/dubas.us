@@ -7,12 +7,17 @@ export interface InfoResource {
     role: string
     handle: string
   }
+  contact: {
+    email: string
+    phone: string
+  }
   images: {
     portrait: string
     signature: string
   }
   links: {
     instagram: string
+    website: string
   }
 }
 
@@ -46,6 +51,22 @@ function imageId(value: unknown, path: string): string {
   return id
 }
 
+function emailAddress(value: unknown, path: string): string {
+  const email = string(value, path)
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return fail(path, 'a valid email address')
+  }
+  return email
+}
+
+function phoneNumber(value: unknown, path: string): string {
+  const phone = string(value, path)
+  if (!/^\+?[0-9][0-9 ().-]{6,31}$/.test(phone)) {
+    return fail(path, 'a valid international phone number')
+  }
+  return phone
+}
+
 function httpsUrl(value: unknown, path: string): string {
   const rawUrl = string(value, path)
   let url: URL
@@ -66,6 +87,7 @@ export function validateInfoResource(value: unknown): InfoResource {
     return fail('info.schemaVersion', 'schema version 1')
   }
   const artist = record(input.artist, 'info.artist')
+  const contact = record(input.contact, 'info.contact')
   const images = record(input.images, 'info.images')
   const links = record(input.links, 'info.links')
 
@@ -78,12 +100,17 @@ export function validateInfoResource(value: unknown): InfoResource {
       role: string(artist.role, 'info.artist.role'),
       handle: string(artist.handle, 'info.artist.handle'),
     },
+    contact: {
+      email: emailAddress(contact.email, 'info.contact.email'),
+      phone: phoneNumber(contact.phone, 'info.contact.phone'),
+    },
     images: {
       portrait: imageId(images.portrait, 'info.images.portrait'),
       signature: imageId(images.signature, 'info.images.signature'),
     },
     links: {
       instagram: httpsUrl(links.instagram, 'info.links.instagram'),
+      website: httpsUrl(links.website, 'info.links.website'),
     },
   }
 }

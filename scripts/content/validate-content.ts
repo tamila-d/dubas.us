@@ -15,8 +15,9 @@ if (
 console.log(
   [
     'Content validation passed',
-    'Card-only content',
+    'Static author content',
     `${snapshot.images.size} image resources`,
+    `${snapshot.portfolio.size} portfolio works`,
     `${snapshot.publicFiles.size} public files`,
   ].join(' · '),
 )

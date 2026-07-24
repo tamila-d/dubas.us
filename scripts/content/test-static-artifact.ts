@@ -14,6 +14,7 @@ assert.match(rootShell, /(?:src|href)="\/assets\//)
 assert.doesNotMatch(rootShell, /(?:src|href)="(?!\/|https?:|mailto:|#)/)
 assert.match(rootShell, /id="app-boot"/)
 assert.match(rootShell, /<title>Tamila Dubas<\/title>/)
+assert.match(rootShell, /phone \? '\/card' : '\/portfolio'/)
 assert.match(
   scriptEnabledRootShell,
   /<link rel="preload" as="style"[^>]* data-app-stylesheet /,
@@ -31,7 +32,23 @@ assert.ok(
   'HTML shell with the pre-React loader must stay below 2 KiB gzip',
 )
 
-for (const shell of ['card/index.html', '404.html']) {
+const portfolioIndex = JSON.parse(
+  await readFile(join(outputRoot, 'content/portfolio/data.json'), 'utf8'),
+) as { items: Array<{ id: string }> }
+
+for (const shell of [
+  'card/index.html',
+  'contact/index.html',
+  'crop/index.html',
+  'portfolio/index.html',
+  ...portfolioIndex.items.map(
+    ({ id }) => `crop/${id}/index.html`,
+  ),
+  ...portfolioIndex.items.map(
+    ({ id }) => `portfolio/${id}/index.html`,
+  ),
+  '404.html',
+]) {
   assert.equal(
     await readFile(join(outputRoot, shell), 'utf8'),
     rootShell,
@@ -43,19 +60,37 @@ await access(join(outputRoot, 'content/info/data.json'))
 await access(
   join(outputRoot, 'content/images/portrait/data.json'),
 )
-await access(join(outputRoot, 'content/images/portrait/640.webp'))
+await access(join(outputRoot, 'content/images/portrait/240.webp'))
+await access(join(outputRoot, 'content/images/portrait/320.jpg'))
 await assert.rejects(
-  () => access(join(outputRoot, 'content/images/portrait/640.avif')),
+  () => access(join(outputRoot, 'content/images/portrait/320.webp')),
 )
 await assert.rejects(
-  () => access(join(outputRoot, 'content/images/portrait/640.jpg')),
+  () => access(join(outputRoot, 'content/images/portrait/480.webp')),
 )
 await access(
   join(outputRoot, 'content/images/signature/data.json'),
 )
-await assert.rejects(() => access(join(outputRoot, 'content/portfolio')))
+await access(join(outputRoot, 'content/portfolio/data.json'))
+await access(
+  join(outputRoot, 'content/portfolio/RgDKYZ9v/data.json'),
+)
+await access(
+  join(outputRoot, 'content/images/RgDKYZ9v/640.webp'),
+)
+await assert.rejects(
+  () => access(join(outputRoot, 'content/images/RgDKYZ9v/320.webp')),
+)
+await assert.rejects(
+  () => access(join(outputRoot, 'content/images/RgDKYZ9v/1350.webp')),
+)
+await access(join(outputRoot, 'content/images/kyQw7CXK/1920.webp'))
+await access(join(outputRoot, 'content/images/kyQw7CXK/2560.webp'))
 await assert.rejects(() => access(join(outputRoot, 'content/store')))
 await assert.rejects(() => access(join(outputRoot, 'content/pages')))
+
+const robots = await readFile(join(outputRoot, 'robots.txt'), 'utf8')
+assert.equal(robots, 'User-agent: *\nDisallow: /crop\n')
 
 const favicon = await readFile(join(outputRoot, 'favicon.svg'), 'utf8')
 assert.match(favicon, /<rect[^>]+fill="#000"/)
@@ -90,4 +125,4 @@ for (const file of await textFiles(outputRoot)) {
 
 assert.equal((await stat(join(outputRoot, 'content'))).isDirectory(), true)
 
-console.log('Card-only static artifact checks passed')
+console.log('Static site artifact checks passed')

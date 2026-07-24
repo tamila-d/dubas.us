@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "YGaGxY9A",
+  "alt": "Watercolor portrait of a pigeon in a blue basketball jersey",
+  "width": 1363,
+  "height": 1852,
+  "original": {
+    "url": "/content/images/YGaGxY9A/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 217,
+      "sources": [
+        {
+          "url": "/content/images/YGaGxY9A/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 326,
+      "sources": [
+        {
+          "url": "/content/images/YGaGxY9A/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 652,
+      "sources": [
+        {
+          "url": "/content/images/YGaGxY9A/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 870,
+      "sources": [
+        {
+          "url": "/content/images/YGaGxY9A/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1304,
+      "sources": [
+        {
+          "url": "/content/images/YGaGxY9A/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1739,
+      "sources": [
+        {
+          "url": "/content/images/YGaGxY9A/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

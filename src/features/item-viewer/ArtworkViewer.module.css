@@ -1,0 +1,199 @@
+:global([data-slot='dialog-content']).viewer {
+  position: fixed;
+  isolation: isolate;
+  display: block;
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  overflow: hidden;
+  padding: 0;
+  border-radius: 0;
+  background: var(--background);
+  overscroll-behavior: none;
+  touch-action: none;
+  transform: none;
+}
+
+.stage {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  outline: none;
+  cursor: zoom-in;
+  touch-action: none;
+  user-select: none;
+}
+
+.stage[data-zoomed] {
+  cursor: grab;
+}
+
+.stage[data-zoomed]:active {
+  cursor: grabbing;
+}
+
+.stage:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: -3px;
+}
+
+.surface {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.picture {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.picture > span,
+.picture picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.zoomPicture {
+  opacity: 0;
+}
+
+.zoomReady {
+  opacity: 1;
+  transition: opacity 140ms ease;
+}
+
+.closeButton,
+.controls,
+.zoomError {
+  position: absolute;
+  z-index: 2;
+}
+
+.closeButton,
+.controls {
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease;
+}
+
+:global([data-slot='dialog-content']).viewer[data-controls-hidden]
+  .closeButton,
+:global([data-slot='dialog-content']).viewer[data-controls-hidden]
+  .controls {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:global([data-slot='dialog-content']).viewer[data-controls-hidden]
+  .controlGroup {
+  pointer-events: none;
+}
+
+.closeButton {
+  top: max(var(--space-3), env(safe-area-inset-top));
+  right: max(var(--space-3), env(safe-area-inset-right));
+}
+
+.closeButton,
+.controlGroup [data-slot='button'] {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  border: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+  box-shadow: 0 8px 28px color-mix(in oklch, var(--foreground) 10%, transparent);
+}
+
+.controls {
+  right: max(var(--space-3), env(safe-area-inset-right));
+  bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  left: max(var(--space-3), env(safe-area-inset-left));
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  pointer-events: none;
+}
+
+.controlGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px;
+  border: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent);
+  border-radius: calc(var(--radius-lg) + 4px);
+  background: color-mix(in oklch, var(--background) 82%, transparent);
+  box-shadow: 0 12px 36px color-mix(in oklch, var(--foreground) 12%, transparent);
+  backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.counter {
+  min-width: 3.5rem;
+  color: var(--foreground);
+  font-size: var(--type-caption);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.zoomError {
+  right: max(var(--space-3), env(safe-area-inset-right));
+  bottom: calc(max(var(--space-3), env(safe-area-inset-bottom)) + 7rem);
+  left: max(var(--space-3), env(safe-area-inset-left));
+  display: flex;
+  max-width: 34rem;
+  min-height: var(--touch-target);
+  margin-inline: auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklch, var(--background) 90%, transparent);
+  color: var(--foreground);
+  box-shadow: 0 12px 36px color-mix(in oklch, var(--foreground) 12%, transparent);
+  font-size: var(--type-caption);
+  backdrop-filter: blur(14px);
+}
+
+.zoomError [data-slot='button'] {
+  min-height: var(--touch-target);
+}
+
+@media (min-width: 560px) {
+  .controls {
+    display: flex;
+    justify-content: center;
+  }
+
+  .zoomError {
+    bottom: calc(max(var(--space-3), env(safe-area-inset-bottom)) + 4.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoomReady,
+  .closeButton,
+  .controls {
+    transition: none;
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "96sNm26A",
+  "alt": "Watercolor of an autumn park bench beside a lake",
+  "width": 1500,
+  "height": 2314,
+  "original": {
+    "url": "/content/images/96sNm26A/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 247,
+      "sources": [
+        {
+          "url": "/content/images/96sNm26A/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 370,
+      "sources": [
+        {
+          "url": "/content/images/96sNm26A/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 740,
+      "sources": [
+        {
+          "url": "/content/images/96sNm26A/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 987,
+      "sources": [
+        {
+          "url": "/content/images/96sNm26A/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1481,
+      "sources": [
+        {
+          "url": "/content/images/96sNm26A/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1975,
+      "sources": [
+        {
+          "url": "/content/images/96sNm26A/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

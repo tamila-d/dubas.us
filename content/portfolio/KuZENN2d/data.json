@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "KuZENN2d",
+  "title": "Winter in the City",
+  "description": "A snow-covered bridge crosses reflective water while the city rises through a softly falling winter sky.",
+  "location": "Gapstow Bridge, Central Park, New York",
+  "createdAt": "2020-01-29",
+  "type": "places",
+  "image": "KuZENN2d",
+  "crop": {
+    "x": 0,
+    "y": 231,
+    "size": 1001
+  },
+  "coordinates": {
+    "latitude": 40.766928,
+    "longitude": -73.97383
+  }
+}

@@ -10,6 +10,7 @@ import {
   type ContentSnapshot,
 } from './pipeline.ts'
 import { generateContentImages } from './image-pipeline.ts'
+import { generatePortfolioIndex } from './portfolio-index.ts'
 import { writeRouteShells } from './route-shells.ts'
 
 function requestPath(url: string | undefined): string {
@@ -32,11 +33,27 @@ export function rootContentPlugin(): Plugin {
   let snapshot: ContentSnapshot | undefined
   let snapshotPromise: Promise<ContentSnapshot> | undefined
   let refreshSequence: Promise<void> = Promise.resolve()
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
+  let pendingImageRefresh = false
+  let pendingPortfolioIndexRefresh = false
 
-  const refreshSnapshot = () => {
+  const refreshSnapshot = ({
+    regenerateImages = true,
+    regeneratePortfolioIndex = true,
+  }: {
+    regenerateImages?: boolean
+    regeneratePortfolioIndex?: boolean
+  } = {}) => {
     const nextSnapshot = refreshSequence
       .catch(() => undefined)
-      .then(() => generateContentImages(contentRoot))
+      .then(() =>
+        regeneratePortfolioIndex
+          ? generatePortfolioIndex(contentRoot)
+          : undefined,
+      )
+      .then(() =>
+        regenerateImages ? generateContentImages(contentRoot) : undefined,
+      )
       .then(() => scanContent(contentRoot))
     refreshSequence = nextSnapshot.then(
       () => undefined,
@@ -64,7 +81,8 @@ export function rootContentPlugin(): Plugin {
       server.watcher.add(contentRoot)
 
       server.watcher.on('all', (_event, changedPath) => {
-        if (!resolve(changedPath).startsWith(contentRoot)) {
+        const resolvedPath = resolve(changedPath)
+        if (!resolvedPath.startsWith(contentRoot)) {
           return
         }
         const normalizedPath = changedPath.split('\\').join('/')
@@ -76,15 +94,39 @@ export function rootContentPlugin(): Plugin {
           return
         }
 
-        void refreshSnapshot().then(
-          () => server.ws.send({ type: 'full-reload' }),
-          (error: unknown) => {
-            server.config.logger.error(
-              error instanceof Error ? error.message : String(error),
-            )
-            server.ws.send({ type: 'full-reload' })
-          },
-        )
+        pendingImageRefresh ||= normalizedPath.includes('/images/')
+        pendingPortfolioIndexRefresh ||=
+          normalizedPath.includes('/portfolio/') &&
+          !normalizedPath.endsWith('/portfolio/data.json')
+        if (refreshTimer !== undefined) {
+          clearTimeout(refreshTimer)
+        }
+        refreshTimer = setTimeout(() => {
+          const regenerateImages = pendingImageRefresh
+          const regeneratePortfolioIndex = pendingPortfolioIndexRefresh
+          pendingImageRefresh = false
+          pendingPortfolioIndexRefresh = false
+          refreshTimer = undefined
+
+          void refreshSnapshot({
+            regenerateImages,
+            regeneratePortfolioIndex,
+          }).then(
+            () => server.ws.send({ type: 'full-reload' }),
+            (error: unknown) => {
+              server.config.logger.error(
+                error instanceof Error ? error.message : String(error),
+              )
+              server.ws.send({ type: 'full-reload' })
+            },
+          )
+        }, 80)
+      })
+
+      server.httpServer?.once('close', () => {
+        if (refreshTimer !== undefined) {
+          clearTimeout(refreshTimer)
+        }
       })
 
       server.middlewares.use(async (request, response, next) => {

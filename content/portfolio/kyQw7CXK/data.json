@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "kyQw7CXK",
+  "title": "Gentle Guardian",
+  "description": "A tender portrait of a gray dog, rendered with an attentive gaze and soft washes of blue and warm earth tones.",
+  "location": "New York, NY",
+  "createdAt": "2024-09-05",
+  "type": "animals",
+  "image": "kyQw7CXK",
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "size": 2670
+  },
+  "coordinates": {
+    "latitude": 40.7128,
+    "longitude": -74.006
+  }
+}

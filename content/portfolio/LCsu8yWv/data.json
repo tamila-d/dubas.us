@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "LCsu8yWv",
+  "title": "A Quiet View",
+  "description": "A solitary figure rests on a park bench beneath a leafy canopy, looking toward a bridge through the morning haze.",
+  "location": "Fort Washington Park, New York",
+  "createdAt": "2023-08-06",
+  "type": "places",
+  "image": "LCsu8yWv",
+  "crop": {
+    "x": 55,
+    "y": 450,
+    "size": 1000
+  },
+  "coordinates": {
+    "latitude": 40.853212,
+    "longitude": -73.941757
+  }
+}

@@ -27,9 +27,24 @@ body {
   margin: 0;
 }
 
+html[data-page-surface='content'] {
+  scrollbar-gutter: stable;
+}
+
 html[data-page-surface='profile'],
 html[data-page-surface='profile'] body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   background: var(--muted);
+}
+
+html[data-page-surface='crop'],
+html[data-page-surface='crop'] body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--foreground);
 }
 
 img,
@@ -38,10 +53,6 @@ svg,
 video {
   display: block;
   max-width: 100%;
-}
-
-a {
-  color: inherit;
 }
 
 :focus-visible {
@@ -201,5 +212,8 @@ select {
   }
   html {
     @apply font-sans;
+  }
+  a {
+    color: inherit;
   }
 }

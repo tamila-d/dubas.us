@@ -107,8 +107,8 @@ export function validateImageResource(
     return fail('image.schemaVersion', 'schema version 1')
   }
   const id = string(input.id, 'image.id')
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
-    return fail('image.id', 'a lowercase URL-safe id')
+  if (!/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/.test(id)) {
+    return fail('image.id', 'a URL-safe alphanumeric id')
   }
   if (expectedId !== undefined && id !== expectedId) {
     return fail('image.id', `"${expectedId}"`)

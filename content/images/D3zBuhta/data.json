@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "D3zBuhta",
+  "alt": "Watercolor of a winding garden path",
+  "width": 1350,
+  "height": 1950,
+  "original": {
+    "url": "/content/images/D3zBuhta/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 231,
+      "sources": [
+        {
+          "url": "/content/images/D3zBuhta/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 347,
+      "sources": [
+        {
+          "url": "/content/images/D3zBuhta/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 693,
+      "sources": [
+        {
+          "url": "/content/images/D3zBuhta/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 924,
+      "sources": [
+        {
+          "url": "/content/images/D3zBuhta/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1387,
+      "sources": [
+        {
+          "url": "/content/images/D3zBuhta/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1849,
+      "sources": [
+        {
+          "url": "/content/images/D3zBuhta/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

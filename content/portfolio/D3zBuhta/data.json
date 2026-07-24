@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "D3zBuhta",
+  "title": "The Garden Path",
+  "description": "A sunlit path winds through fresh green trees and violet flowers toward the distant outline of a bridge.",
+  "location": "Fort Tryon Park, New York",
+  "createdAt": "2022-06-27",
+  "type": "places",
+  "image": "D3zBuhta",
+  "crop": {
+    "x": 0,
+    "y": 156,
+    "size": 1350
+  },
+  "coordinates": {
+    "latitude": 40.86181,
+    "longitude": -73.932387
+  }
+}

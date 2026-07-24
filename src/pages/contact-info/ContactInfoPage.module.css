@@ -1,0 +1,134 @@
+.page {
+  width: 100%;
+  min-height: 100svh;
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.shell {
+  width: min(100%, var(--layout-wide-max));
+  margin-inline: auto;
+  padding:
+    var(--content-page-start)
+    var(--page-gutter)
+    max(72px, env(safe-area-inset-bottom));
+}
+
+.hero {
+  display: grid;
+  max-width: 42rem;
+}
+
+.hero h1,
+.hero p,
+.saveDescription {
+  margin: 0;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 9vw, 6.75rem);
+  font-weight: 500;
+  letter-spacing: -0.075em;
+  line-height: 0.9;
+}
+
+.hero p {
+  max-width: 34rem;
+  margin-top: clamp(18px, 3vw, 28px);
+  color: var(--muted-foreground);
+  font-size: var(--type-body);
+  line-height: 1.65;
+}
+
+.cardGrid {
+  display: grid;
+  margin-top: clamp(48px, 8vw, 88px);
+  align-items: stretch;
+  gap: clamp(16px, 3vw, 28px);
+}
+
+.detailsCard,
+.saveCard {
+  min-width: 0;
+}
+
+.contactList {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.contactLink {
+  width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+  overflow: hidden;
+  text-decoration: none;
+  text-overflow: ellipsis;
+}
+
+.profileHeader {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto;
+  align-items: center;
+  column-gap: var(--space-4);
+  row-gap: 0;
+}
+
+.avatar {
+  width: clamp(64px, 10vw, 80px);
+  height: clamp(64px, 10vw, 80px);
+}
+
+.avatarImage {
+  object-position: 52% 32%;
+}
+
+.profileCopy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.saveDescription {
+  color: var(--muted-foreground);
+  line-height: 1.65;
+}
+
+.downloadButton {
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .cardGrid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+@media (pointer: coarse) {
+  .contactLink,
+  .downloadButton {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 899px) {
+  .hero h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .hero p {
+    display: none;
+  }
+
+  .cardGrid {
+    margin-top: 0;
+  }
+}

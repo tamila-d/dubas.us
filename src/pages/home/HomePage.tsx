@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from 'react-router-dom'
+import { Link, useRouteLoaderData } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
   Avatar,
@@ -28,7 +28,7 @@ const unavailableLinks = [
     id: 'portfolio',
     label: 'Portfolio',
     href: APP_ROUTES.portfolio,
-    unavailable: true,
+    unavailable: false,
   },
   {
     id: 'store',
@@ -40,7 +40,7 @@ const unavailableLinks = [
     id: 'contact',
     label: 'Contact Me',
     href: APP_ROUTES.contact,
-    unavailable: true,
+    unavailable: false,
   },
 ] as const
 
@@ -132,6 +132,13 @@ export function HomePage() {
                   >
                     {link.label}
                   </a>
+                ) : link.id === 'contact' || link.id === 'portfolio' ? (
+                  <Link
+                    className={profileLinkClassName}
+                    to={link.href}
+                  >
+                    {link.label}
+                  </Link>
                 ) : (
                   <a
                     className={profileLinkClassName}

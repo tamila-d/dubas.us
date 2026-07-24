@@ -6,6 +6,12 @@ export interface ImageFocalPoint {
   y: number
 }
 
+export interface ImageCrop {
+  x: number
+  y: number
+  size: number
+}
+
 export interface ResponsiveSource {
   src: string
   type: string
@@ -19,14 +25,16 @@ export interface ResponsiveImageTier {
 }
 
 export const IMAGE_TIER_WIDTHS: Record<ImageTierName, readonly number[]> = {
-  card: [320, 640],
-  detail: [960, 1280],
+  card: [160, 240],
+  detail: [320, 480, 640, 960, 1280],
   zoom: [1920, 2560],
 }
 
 export const IMAGE_TIER_SIZES: Record<ImageTierName, string> = {
   card:
-    '(max-width: 639px) calc(100vw - 2rem), (max-width: 1023px) calc(50vw - 2rem), min(33vw, 480px)',
+    '(max-width: 699px) calc((100vw - 2.75rem) / 2), ' +
+    '(max-width: 1099px) calc((100vw - 6rem) / 3), ' +
+    'min(calc((100vw - 13.5rem) / 5), 16rem)',
   detail: '(max-width: 767px) calc(100vw - 2rem), min(70vw, 1280px)',
   zoom: '100vw',
 }
@@ -38,7 +46,7 @@ export const IMAGE_FORMAT_MIME = {
 } as const
 
 export const IMAGE_BYTE_BUDGETS: Record<ImageTierName, number> = {
-  card: 350_000,
+  card: 40_000,
   detail: 900_000,
   zoom: 2_500_000,
 }

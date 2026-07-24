@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "YGaGxY9A",
+  "title": "New York Eleven",
+  "description": "A proud city pigeon poses in a blue basketball jersey, combining playful character with detailed watercolor portraiture.",
+  "location": "Madison Square Garden, New York",
+  "createdAt": "2022-11-16",
+  "type": "animals",
+  "image": "YGaGxY9A",
+  "crop": {
+    "x": 0,
+    "y": 87,
+    "size": 1363
+  },
+  "coordinates": {
+    "latitude": 40.7505,
+    "longitude": -73.9934
+  }
+}

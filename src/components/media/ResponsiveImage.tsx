@@ -1,12 +1,15 @@
 import {
-  useEffect,
+  useLayoutEffect,
+  useRef,
   useState,
+  type CSSProperties,
   type ImgHTMLAttributes,
   type SourceHTMLAttributes,
   type SyntheticEvent,
 } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import type {
+  ImageCrop,
   ImageFocalPoint,
   ResponsiveImageData,
   ResponsiveImageTier,
@@ -30,6 +33,7 @@ interface ResponsiveImageProps<Tier extends ResponsiveImageTierName>
     'alt' | 'height' | 'loading' | 'sizes' | 'src' | 'srcSet' | 'width'
   > {
   image: TieredResponsiveImage<Tier>
+  crop?: ImageCrop
   tier?: Tier
   priority?: boolean
   pictureClassName?: string
@@ -78,6 +82,7 @@ export function responsiveImageSourceProps<
 
 export function ResponsiveImage<Tier extends ResponsiveImageTierName = 'card'>({
   image,
+  crop,
   tier: tierName = 'card' as Tier,
   priority = false,
   pictureClassName,
@@ -88,15 +93,34 @@ export function ResponsiveImage<Tier extends ResponsiveImageTierName = 'card'>({
   ...props
 }: ResponsiveImageProps<Tier>) {
   const fallback = responsiveImageFallbackProps(image, tierName)
+  const imageElementRef = useRef<HTMLImageElement>(null)
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>(
     'loading',
   )
   const objectPosition = image.focalPoint
     ? `${image.focalPoint.x * 100}% ${image.focalPoint.y * 100}%`
     : undefined
+  const cropStyle: CSSProperties | undefined = crop === undefined
+    ? undefined
+    : {
+        height: `${(image.height / crop.size) * 100}%`,
+        left: `${(-crop.x / crop.size) * 100}%`,
+        maxWidth: 'none',
+        objectFit: 'fill',
+        position: 'absolute',
+        top: `${(-crop.y / crop.size) * 100}%`,
+        width: `${(image.width / crop.size) * 100}%`,
+      }
 
-  useEffect(() => {
-    setStatus('loading')
+  useLayoutEffect(() => {
+    const element = imageElementRef.current
+    setStatus(
+      element?.complete
+        ? element.naturalWidth > 0
+          ? 'loaded'
+          : 'error'
+        : 'loading',
+    )
   }, [fallback.src])
 
   const handleLoad = (event: SyntheticEvent<HTMLImageElement>) => {
@@ -121,7 +145,10 @@ export function ResponsiveImage<Tier extends ResponsiveImageTierName = 'card'>({
             )}
           />
         )}
-        <picture className={styles.picture}>
+        <picture
+          className={styles.picture}
+          data-crop={crop === undefined ? undefined : ''}
+        >
           <source
             type="image/avif"
             {...responsiveImageSourceProps(image, tierName, 'image/avif')}
@@ -140,7 +167,8 @@ export function ResponsiveImage<Tier extends ResponsiveImageTierName = 'card'>({
             loading={priority ? 'eager' : 'lazy'}
             onError={handleError}
             onLoad={handleLoad}
-            style={{ objectPosition, ...style }}
+            ref={imageElementRef}
+            style={{ objectPosition, ...style, ...cropStyle }}
           />
         </picture>
       </span>

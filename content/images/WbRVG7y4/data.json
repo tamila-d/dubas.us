@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "WbRVG7y4",
+  "alt": "Watercolor of a girl and tiger beside a woodland stream",
+  "width": 2407,
+  "height": 3290,
+  "original": {
+    "url": "/content/images/WbRVG7y4/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 219,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 328,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 656,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 875,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1312,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 1750,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/1280.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 2624,
+      "sources": [
+        {
+          "url": "/content/images/WbRVG7y4/1920.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

@@ -12,10 +12,19 @@ export function App() {
     () => appRouter.state.initialized,
   )
   const pathname = window.location.pathname
+  const isCropPath =
+    pathname === APP_ROUTES.crop ||
+    pathname.startsWith(`${APP_ROUTES.crop}/`)
   const isProfilePath =
     pathname === APP_ROUTES.home ||
     pathname === APP_ROUTES.card ||
     pathname === `${APP_ROUTES.card}/`
+  const isPortfolioPath =
+    pathname === APP_ROUTES.portfolio ||
+    pathname === `${APP_ROUTES.portfolio}/`
+  const isPortfolioItemPath =
+    pathname.startsWith(`${APP_ROUTES.portfolio}/`) &&
+    pathname !== `${APP_ROUTES.portfolio}/`
 
   return (
     <>
@@ -23,6 +32,9 @@ export function App() {
         <RouterProvider router={appRouter} />
       ) : (
         <AppBootstrapSkeleton
+          catalog={isPortfolioPath}
+          crop={isCropPath}
+          detail={isPortfolioItemPath}
           label="Loading page…"
           profile={isProfilePath}
         />

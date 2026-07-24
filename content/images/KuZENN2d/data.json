@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "KuZENN2d",
+  "alt": "Watercolor of a snowy bridge and city skyline",
+  "width": 1001,
+  "height": 1534,
+  "original": {
+    "url": "/content/images/KuZENN2d/original.jpg",
+    "type": "image/jpeg"
+  },
+  "variants": [
+    {
+      "width": 160,
+      "height": 245,
+      "sources": [
+        {
+          "url": "/content/images/KuZENN2d/160.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 240,
+      "height": 368,
+      "sources": [
+        {
+          "url": "/content/images/KuZENN2d/240.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 480,
+      "height": 736,
+      "sources": [
+        {
+          "url": "/content/images/KuZENN2d/480.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "height": 981,
+      "sources": [
+        {
+          "url": "/content/images/KuZENN2d/640.webp",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 1471,
+      "sources": [
+        {
+          "url": "/content/images/KuZENN2d/960.webp",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}
