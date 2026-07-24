@@ -276,6 +276,13 @@ async function loadPortfolio(
           `"${reference.group}"`,
       )
     }
+    if (
+      item.availableForPurchase !== reference.availableForPurchase
+    ) {
+      throw new Error(
+        `Portfolio item ${item.id} availability must match the index`,
+      )
+    }
     if (item.createdAt === null) {
       throw new Error(
         `Portfolio item ${item.id} needs createdAt before indexing`,

@@ -81,14 +81,37 @@ try {
   )
 
   const portfolioClient = new PortfolioClient(contentClient)
-  const portfolio = await portfolioClient.getIndex()
-  const catalog = JSON.parse(
+  const expectedCatalog = JSON.parse(
     responses.get('/content/portfolio/data.json')!,
-  ) as { items: Array<{ id: string; group: string }> }
+  ) as {
+    items: Array<{
+      id: string
+      group: string
+      availableForPurchase: boolean
+    }>
+  }
+  const requestCountBeforeCatalog = requests.length
+  const catalog = await portfolioClient.getCatalog()
+  assert.equal(
+    requests.length,
+    requestCountBeforeCatalog + 1,
+    'Portfolio catalog loading must request only the catalog index',
+  )
+  assert.equal(
+    requests.at(-1),
+    '/content/portfolio/data.json',
+    'Portfolio catalog must be the first portfolio request',
+  )
+  assert.deepEqual(
+    catalog,
+    expectedCatalog,
+    'Portfolio catalog loading must preserve the authored index',
+  )
+  const portfolio = await portfolioClient.getIndexFromCatalog(catalog)
   assert.equal(portfolio.items.length, 14)
   assert.deepEqual(
     portfolio.items.map((item) => item.id),
-    catalog.items.map((item) => item.id),
+    expectedCatalog.items.map((item) => item.id),
     'Portfolio client must preserve the explicit catalog order',
   )
   assert.ok(
@@ -104,8 +127,16 @@ try {
   )
   assert.deepEqual(
     [...new Set(portfolio.items.map((item) => item.type))].sort(),
-    [...new Set(catalog.items.map((item) => item.group))].sort(),
+    [...new Set(expectedCatalog.items.map((item) => item.group))].sort(),
     'Portfolio filters must come from catalog groups',
+  )
+  assert.deepEqual(
+    expectedCatalog.items
+      .filter((item) => item.availableForPurchase)
+      .map((item) => item.id)
+      .sort(),
+    ['FRP3sv9X', 'LCsu8yWv', 'RgDKYZ9v', 'YGaGxY9A'].sort(),
+    'Portfolio index must expose availability for stable filtered layouts',
   )
   assert.deepEqual(
     portfolio.items

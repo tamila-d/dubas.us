@@ -82,9 +82,17 @@
   height: 24px;
 }
 
+.catalogToolbar {
+  display: flex;
+  margin-top: 28px;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .filterSkeletons {
   display: flex;
-  margin-top: clamp(32px, 5vw, 56px);
+  min-width: 0;
+  flex: 1;
   overflow: hidden;
   gap: var(--space-2);
 }
@@ -96,11 +104,21 @@
   border-radius: var(--radius-lg);
 }
 
+.viewerAction {
+  width: 6rem;
+  height: var(--touch-target);
+  flex: none;
+  border-radius: var(--radius-lg);
+}
+
 .grid {
   display: grid;
-  margin-top: clamp(32px, 5vw, 72px);
+  margin-top: clamp(34px, 3vw, 40px);
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(24px, 4vw, 40px);
+  align-items: start;
+  gap:
+    clamp(28px, 5vw, 56px)
+    clamp(12px, 3vw, 30px);
 }
 
 .card {
@@ -110,8 +128,8 @@
 
 .media {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius-xl);
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
 }
 
 .cardLine {
@@ -125,14 +143,26 @@
 }
 
 .detail {
+  display: block;
+}
+
+.detailBack {
+  width: 6rem;
+  height: var(--touch-target);
+  margin-bottom: var(--content-page-start);
+  border-radius: var(--radius-lg);
+}
+
+.detailLayout {
   display: grid;
+  min-width: 0;
   gap: clamp(32px, 6vw, 72px);
 }
 
 .detailMedia {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--radius-xl);
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
 }
 
 .detailCopy {
@@ -265,13 +295,20 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+@media (min-width: 820px) {
+  .detailLayout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.55fr);
+    align-items: start;
   }
 
-  .detail {
-    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.7fr);
+  .detailMedia {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
@@ -288,8 +325,21 @@
     white-space: nowrap;
   }
 
-  .filterSkeletons,
   .contactLayout {
     margin-top: 0;
+  }
+
+  .catalogToolbar {
+    margin-top: 0;
+  }
+
+  .detailBack {
+    display: none;
+  }
+}
+
+@media (max-width: 699px) {
+  .filterSkeletons .filter:not(:first-child) {
+    display: none;
   }
 }

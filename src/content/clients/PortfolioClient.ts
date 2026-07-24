@@ -8,6 +8,9 @@ import {
   validatePortfolioCatalogResource,
   validatePortfolioItemResource,
   type PortfolioIndexResource,
+  type PortfolioCatalogEntry,
+  type PortfolioCatalogResource,
+  type PortfolioIndexEntry,
   type PortfolioItemDetailResource,
   type PortfolioItemResource,
 } from '../portfolio-resource.ts'
@@ -29,47 +32,75 @@ export class PortfolioClient {
     this.imagesClient = new ImagesClient(contentClient)
   }
 
-  async getIndex(
+  async getCatalog(
     options: ContentLoadOptions = {},
-  ): Promise<PortfolioIndexResource> {
-    const catalog = validatePortfolioCatalogResource(
+  ): Promise<PortfolioCatalogResource> {
+    return validatePortfolioCatalogResource(
       await this.contentClient.getJson(
         contentUrl('portfolio/data.json'),
         options,
       ),
     )
+  }
+
+  async getCatalogEntry(
+    entry: PortfolioCatalogEntry,
+    options: ContentLoadOptions = {},
+  ): Promise<PortfolioIndexEntry> {
+    const item = await this.getItem(entry.id, options)
+    if (item.type !== entry.group) {
+      throw new PortfolioResourceValidationError(
+        `Portfolio item ${entry.id} must belong to group "${entry.group}"`,
+      )
+    }
+    if (
+      item.availableForPurchase !== entry.availableForPurchase
+    ) {
+      throw new PortfolioResourceValidationError(
+        `Portfolio item ${entry.id} availability must match the catalog`,
+      )
+    }
+    const image = await this.imagesClient.get(item.image, options)
+    validatePortfolioCropBounds(
+      item.crop,
+      image.width,
+      image.height,
+    )
+
+    return {
+      id: item.id,
+      title: item.title,
+      location: item.location,
+      createdAt: item.createdAt,
+      type: entry.group,
+      availableForPurchase: item.availableForPurchase,
+      commissioned: item.commissioned,
+      crop: item.crop,
+      image: imageResourceToResponsiveData(image),
+    }
+  }
+
+  async getIndexFromCatalog(
+    catalog: PortfolioCatalogResource,
+    options: ContentLoadOptions = {},
+  ): Promise<PortfolioIndexResource> {
     const items = await Promise.all(
-      catalog.items.map(async ({ id, group }) => {
-        const item = await this.getItem(id, options)
-        if (item.type !== group) {
-          throw new PortfolioResourceValidationError(
-            `Portfolio item ${id} must belong to group "${group}"`,
-          )
-        }
-        const image = await this.imagesClient.get(item.image, options)
-        validatePortfolioCropBounds(
-          item.crop,
-          image.width,
-          image.height,
-        )
-        return {
-          id: item.id,
-          title: item.title,
-          location: item.location,
-          createdAt: item.createdAt,
-          type: group,
-          availableForPurchase: item.availableForPurchase,
-          commissioned: item.commissioned,
-          crop: item.crop,
-          image: imageResourceToResponsiveData(image),
-        }
-      }),
+      catalog.items.map((entry) =>
+        this.getCatalogEntry(entry, options),
+      ),
     )
 
     return {
       schemaVersion: 1,
       items,
     }
+  }
+
+  async getIndex(
+    options: ContentLoadOptions = {},
+  ): Promise<PortfolioIndexResource> {
+    const catalog = await this.getCatalog(options)
+    return this.getIndexFromCatalog(catalog, options)
   }
 
   async getItem(
@@ -112,3 +143,5 @@ export class PortfolioClient {
     this.contentClient.invalidate(portfolioItemUrl(id))
   }
 }
+
+export const portfolioClient = new PortfolioClient()

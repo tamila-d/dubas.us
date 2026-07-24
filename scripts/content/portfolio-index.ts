@@ -58,6 +58,7 @@ export async function generatePortfolioIndex(
     items: items.map((item) => ({
       id: item.id,
       group: item.type,
+      availableForPurchase: item.availableForPurchase,
     })),
   }
   const target = join(contentRoot, 'portfolio', 'data.json')

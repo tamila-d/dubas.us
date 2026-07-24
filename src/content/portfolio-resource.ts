@@ -28,6 +28,7 @@ export interface PortfolioCoordinates {
 export interface PortfolioCatalogEntry {
   id: string
   group: string
+  availableForPurchase: boolean
 }
 
 export interface PortfolioCatalogResource {
@@ -51,11 +52,19 @@ export interface PortfolioIndexResource {
   items: PortfolioIndexEntry[]
 }
 
+export interface PortfolioCatalogRouteData {
+  catalog: PortfolioCatalogResource
+}
+
 export interface PortfolioItemDetailResource {
   item: PortfolioItemResource
   image: ResponsiveImageData & {
     original: ImageResourceSource
   }
+}
+
+export interface PortfolioItemRouteData {
+  id: string
 }
 
 export class PortfolioResourceValidationError extends Error {
@@ -263,6 +272,10 @@ export function validatePortfolioCatalogResource(
     return {
       id: itemId,
       group: group(item.group, `${path}.group`),
+      availableForPurchase: boolean(
+        item.availableForPurchase,
+        `${path}.availableForPurchase`,
+      ),
     }
   })
 

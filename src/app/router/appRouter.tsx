@@ -1,4 +1,3 @@
-import { lazy } from 'react'
 import {
   createBrowserRouter,
   redirect,
@@ -10,30 +9,31 @@ import { RouteErrorPage } from '@/pages/route-error/RouteErrorPage'
 import { APP_ROUTE_IDS, APP_ROUTES } from '@/config/routes'
 import { loadCardContent } from '@/content/card-loader'
 import { InfoClient } from '@/content/clients/InfoClient'
-import { PortfolioClient } from '@/content/clients/PortfolioClient'
+import { portfolioClient } from '@/content/clients/PortfolioClient'
+import {
+  lazyComponent,
+  loadLazyModule,
+} from '@/lib/loadLazyModule'
 import { browserEntryRoute } from './entryRoute'
 
-const HomePage = lazy(() =>
-  import('@/pages/home/HomePage').then(({ HomePage }) => ({ default: HomePage })),
+const HomePage = lazyComponent(
+  () => import('@/pages/home/HomePage'),
+  ({ HomePage }) => HomePage,
 )
-const ContactInfoPage = lazy(() =>
-  import('@/pages/contact-info/ContactInfoPage').then(
-    ({ ContactInfoPage }) => ({ default: ContactInfoPage }),
-  ),
+const ContactInfoPage = lazyComponent(
+  () => import('@/pages/contact-info/ContactInfoPage'),
+  ({ ContactInfoPage }) => ContactInfoPage,
 )
-const PortfolioPage = lazy(() =>
-  import('@/pages/portfolio-gallery/PortfolioPage').then(
-    ({ PortfolioPage }) => ({ default: PortfolioPage }),
-  ),
+const PortfolioPage = lazyComponent(
+  () => import('@/pages/portfolio-gallery/PortfolioPage'),
+  ({ PortfolioPage }) => PortfolioPage,
 )
-const PortfolioItemPage = lazy(() =>
-  import('@/pages/portfolio-item/PortfolioItemPage').then(
-    ({ PortfolioItemPage }) => ({ default: PortfolioItemPage }),
-  ),
+const PortfolioItemPage = lazyComponent(
+  () => import('@/pages/portfolio-item/PortfolioItemPage'),
+  ({ PortfolioItemPage }) => PortfolioItemPage,
 )
 
 const infoClient = new InfoClient()
-const portfolioClient = new PortfolioClient()
 
 function cropCatalogLoader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url)
@@ -111,18 +111,20 @@ async function appShellLoader({ request }: LoaderFunctionArgs) {
   return loadCardContent({ signal: request.signal })
 }
 
-function portfolioLoader({ request }: LoaderFunctionArgs) {
-  return portfolioClient.getIndex({ signal: request.signal })
+async function portfolioLoader({ request }: LoaderFunctionArgs) {
+  const catalog = await portfolioClient.getCatalog({
+    signal: request.signal,
+  })
+
+  return { catalog }
 }
 
-function portfolioItemLoader({ params, request }: LoaderFunctionArgs) {
+function portfolioItemLoader({ params }: LoaderFunctionArgs) {
   if (params.id === undefined) {
     throw new Response('Portfolio item id is required', { status: 404 })
   }
 
-  return portfolioClient.getDetail(params.id, {
-    signal: request.signal,
-  })
+  return { id: params.id }
 }
 
 function revalidateWhenPathChanges({
@@ -138,8 +140,8 @@ export const appRouter = createBrowserRouter([
     errorElement: <RouteErrorPage />,
     loader: cropCatalogLoader,
     lazy: async () => {
-      const { CropGalleryPage } = await import(
-        '@/pages/crop/CropGalleryPage'
+      const { CropGalleryPage } = await loadLazyModule(
+        () => import('@/pages/crop/CropGalleryPage'),
       )
 
       return {
@@ -152,7 +154,9 @@ export const appRouter = createBrowserRouter([
     errorElement: <RouteErrorPage />,
     loader: cropItemLoader,
     lazy: async () => {
-      const { CropPage } = await import('@/pages/crop/CropPage')
+      const { CropPage } = await loadLazyModule(
+        () => import('@/pages/crop/CropPage'),
+      )
 
       return {
         Component: CropPage,

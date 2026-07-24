@@ -2,59 +2,73 @@
   "items": [
     {
       "id": "aZpRH4Gg",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "FRP3sv9X",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": true
     },
     {
       "id": "A2SoVKNn",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "kyQw7CXK",
-      "group": "animals"
+      "group": "animals",
+      "availableForPurchase": false
     },
     {
       "id": "RgDKYZ9v",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": true
     },
     {
       "id": "96sNm26A",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "LCsu8yWv",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": true
     },
     {
       "id": "fc7oh7Dr",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "YGaGxY9A",
-      "group": "animals"
+      "group": "animals",
+      "availableForPurchase": true
     },
     {
       "id": "D3zBuhta",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "WbRVG7y4",
-      "group": "illustrations"
+      "group": "illustrations",
+      "availableForPurchase": false
     },
     {
       "id": "5mS2DBFs",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "bx8kHC7P",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     },
     {
       "id": "KuZENN2d",
-      "group": "places"
+      "group": "places",
+      "availableForPurchase": false
     }
   ]
 }

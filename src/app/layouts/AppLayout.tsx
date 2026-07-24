@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 import { AppBootReady } from '@/components/loading/AppBootReady'
 import {
-  CatalogPageSkeleton,
+  CatalogIndexSkeleton,
   ItemDetailSkeleton,
 } from '@/components/loading/ContentSkeletons'
 import { PageLoader } from '@/components/page-loader/PageLoader'
@@ -60,7 +60,7 @@ export function AppLayout() {
         id={mainContentId}
       >
         {pendingPortfolio ? (
-          <CatalogPageSkeleton label="Loading original art…" />
+          <CatalogIndexSkeleton label="Loading original art index…" />
         ) : pendingPortfolioItem ? (
           <ItemDetailSkeleton label="Loading artwork…" />
         ) : (

@@ -1,7 +1,4 @@
-import {
-  useRef,
-  useState,
-} from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ExpandIcon,
   MapPinIcon,
@@ -10,6 +7,7 @@ import {
   useLoaderData,
   useRouteLoaderData,
 } from 'react-router-dom'
+import { ItemDetailSkeleton } from '@/components/loading/ContentSkeletons'
 import { ResponsiveImage } from '@/components/media/ResponsiveImage'
 import { PortfolioBackButton } from '@/components/navigation/PortfolioBackButton'
 import { Badge } from '@/components/ui/badge'
@@ -17,9 +15,11 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { APP_ROUTE_IDS } from '@/config/routes'
 import type { CardContent } from '@/content/card-types'
+import { portfolioClient } from '@/content/clients/PortfolioClient'
 import type {
   PortfolioItemDetailResource,
   PortfolioItemResource,
+  PortfolioItemRouteData,
 } from '@/content/portfolio-resource'
 import type {
   ArtworkViewerImage,
@@ -27,6 +27,7 @@ import type {
 import { artworkViewerLabels } from '@/features/item-viewer/viewer-contract'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { cn } from '@/lib/utils'
+import { loadLazyModule } from '@/lib/loadLazyModule'
 import styles from './PortfolioItemPage.module.css'
 
 type ArtworkViewerComponent =
@@ -40,8 +41,8 @@ function loadArtworkViewer(): Promise<ArtworkViewerComponent> {
     return Promise.resolve(artworkViewerComponent)
   }
 
-  artworkViewerPromise ??= import(
-    '@/features/item-viewer/ArtworkViewer'
+  artworkViewerPromise ??= loadLazyModule(
+    () => import('@/features/item-viewer/ArtworkViewer'),
   ).then(({ ArtworkViewer }) => {
     artworkViewerComponent = ArtworkViewer
     return ArtworkViewer
@@ -70,8 +71,48 @@ function mapUrl(item: PortfolioItemResource): string {
 }
 
 export function PortfolioItemPage() {
-  const { item, image } =
-    useLoaderData() as PortfolioItemDetailResource
+  const { id } = useLoaderData() as PortfolioItemRouteData
+  const [detail, setDetail] =
+    useState<PortfolioItemDetailResource | null>(null)
+  const [loadError, setLoadError] = useState<unknown>(null)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    setDetail(null)
+    setLoadError(null)
+
+    void portfolioClient
+      .getDetail(id, { signal: controller.signal })
+      .then((resource) => {
+        if (!controller.signal.aborted) {
+          setDetail(resource)
+        }
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) {
+          setLoadError(error)
+        }
+      })
+
+    return () => controller.abort()
+  }, [id])
+
+  if (loadError !== null) {
+    throw loadError
+  }
+
+  if (detail === null || detail.item.id !== id) {
+    return <ItemDetailSkeleton label="Loading artwork…" />
+  }
+
+  return <PortfolioItemContent detail={detail} key={detail.item.id} />
+}
+
+function PortfolioItemContent({
+  detail: { item, image },
+}: {
+  detail: PortfolioItemDetailResource
+}) {
   const { info } = useRouteLoaderData(
     APP_ROUTE_IDS.shell,
   ) as Pick<CardContent, 'info'>

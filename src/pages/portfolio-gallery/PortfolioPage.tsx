@@ -17,6 +17,7 @@ import {
   useRouteLoaderData,
   useSearchParams,
 } from 'react-router-dom'
+import { CatalogPageSkeleton } from '@/components/loading/ContentSkeletons'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -32,19 +33,23 @@ import {
 import { ResponsiveImage } from '@/components/media/ResponsiveImage'
 import { APP_ROUTE_IDS, APP_ROUTES } from '@/config/routes'
 import type { CardContent } from '@/content/card-types'
+import { portfolioClient } from '@/content/clients/PortfolioClient'
 import type {
+  PortfolioCatalogRouteData,
   PortfolioIndexEntry,
   PortfolioIndexResource,
 } from '@/content/portfolio-resource'
 import { artworkViewerLabels } from '@/features/item-viewer/viewer-contract'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
+import { loadLazyModule } from '@/lib/loadLazyModule'
 import {
   PortfolioFilterButtons,
   type PortfolioFilterOption,
 } from './PortfolioFilterButtons'
 import styles from './PortfolioPage.module.css'
 
-const loadPortfolioFilterMenu = () => import('./PortfolioFilterMenu')
+const loadPortfolioFilterMenu = () =>
+  loadLazyModule(() => import('./PortfolioFilterMenu'))
 
 const PortfolioFilterMenu = lazy(() =>
   loadPortfolioFilterMenu().then(({ PortfolioFilterMenu }) => ({
@@ -53,7 +58,7 @@ const PortfolioFilterMenu = lazy(() =>
 )
 
 const loadArtworkViewer = () =>
-  import('@/features/item-viewer/ArtworkViewer')
+  loadLazyModule(() => import('@/features/item-viewer/ArtworkViewer'))
 
 const ArtworkViewer = lazy(() =>
   loadArtworkViewer().then(({ ArtworkViewer }) => ({
@@ -130,8 +135,73 @@ function PortfolioWork({
 }
 
 export function PortfolioPage() {
-  const { items } = useLoaderData() as PortfolioIndexResource
+  const { catalog } =
+    useLoaderData() as PortfolioCatalogRouteData
   const { info } = useRouteLoaderData(APP_ROUTE_IDS.shell) as CardContent
+  const [searchParams] = useSearchParams()
+  const [portfolio, setPortfolio] =
+    useState<PortfolioIndexResource | null>(null)
+  const [loadedCatalog, setLoadedCatalog] =
+    useState<typeof catalog | null>(null)
+  const [loadError, setLoadError] = useState<unknown>(null)
+  const requestedType = searchParams.get('type')
+  const requestedAvailability = searchParams.get('availability')
+  const catalogTypes = new Set(
+    catalog.items.map((item) => item.group),
+  )
+  const skeletonItemCount =
+    requestedAvailability === availableFilter
+      ? catalog.items.filter((item) => item.availableForPurchase).length
+      : requestedType !== null && catalogTypes.has(requestedType)
+        ? catalog.items.filter((item) => item.group === requestedType).length
+        : catalog.items.length
+  const displayName = `${info.artist.firstName} ${info.artist.lastName}`
+
+  useDocumentTitle(`Original Art — ${displayName}`)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    setPortfolio(null)
+    setLoadedCatalog(null)
+    setLoadError(null)
+
+    void portfolioClient
+      .getIndexFromCatalog(catalog, { signal: controller.signal })
+      .then((resource) => {
+        if (controller.signal.aborted) return
+        setPortfolio(resource)
+        setLoadedCatalog(catalog)
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) {
+          setLoadError(error)
+        }
+      })
+
+    return () => controller.abort()
+  }, [catalog])
+
+  if (loadError !== null) {
+    throw loadError
+  }
+
+  if (portfolio === null || loadedCatalog !== catalog) {
+    return (
+      <CatalogPageSkeleton
+        count={Math.min(skeletonItemCount, initialVisibleCount)}
+        label="Loading original art…"
+      />
+    )
+  }
+
+  return <PortfolioPageContent items={portfolio.items} />
+}
+
+function PortfolioPageContent({
+  items,
+}: {
+  items: PortfolioIndexEntry[]
+}) {
   const location = useLocation()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -186,10 +256,7 @@ export function PortfolioPage() {
   const selectedViewerImage = viewerImages.find(
     (image) => image.id === selectedViewerId,
   )
-  const displayName = `${info.artist.firstName} ${info.artist.lastName}`
   const returnTo = `${location.pathname}${location.search}`
-
-  useDocumentTitle(`Original Art — ${displayName}`)
 
   useEffect(() => {
     const invalidType =

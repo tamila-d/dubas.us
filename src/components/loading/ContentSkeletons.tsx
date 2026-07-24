@@ -51,14 +51,40 @@ function CardSkeleton() {
 function ItemDetailSkeletonContent() {
   return (
     <div className={styles.detail}>
-      <Skeleton className={styles.detailMedia} />
-      <div className={styles.detailCopy}>
-        <Skeleton className={styles.eyebrow} />
-        <Skeleton className={styles.title} />
-        <Skeleton className={styles.copy} />
-        <Skeleton className={styles.copy} />
-        <Skeleton className={styles.copyShort} />
+      <Skeleton className={styles.detailBack} />
+      <div className={styles.detailLayout}>
+        <Skeleton className={styles.detailMedia} />
+        <div className={styles.detailCopy}>
+          <Skeleton className={styles.eyebrow} />
+          <Skeleton className={styles.title} />
+          <Skeleton className={styles.copy} />
+          <Skeleton className={styles.copy} />
+          <Skeleton className={styles.copyShort} />
+        </div>
       </div>
+    </div>
+  )
+}
+
+function CatalogSkeletonContent({ count }: { count?: number }) {
+  return (
+    <div className={styles.page}>
+      <IntroSkeleton description={false} />
+      <div className={styles.catalogToolbar}>
+        <div className={styles.filterSkeletons}>
+          {Array.from({ length: 4 }, (_, index) => (
+            <Skeleton className={styles.filter} key={index} />
+          ))}
+        </div>
+        <Skeleton className={styles.viewerAction} />
+      </div>
+      {count === undefined ? null : (
+        <div className={styles.grid}>
+          {Array.from({ length: count }, (_, index) => (
+            <CardSkeleton key={index} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -82,22 +108,21 @@ export function PageSkeleton({ label }: SkeletonStatusProps) {
   )
 }
 
-export function CatalogPageSkeleton({ label }: SkeletonStatusProps) {
+export function CatalogIndexSkeleton({ label }: SkeletonStatusProps) {
   return (
     <Status label={label}>
-      <div className={styles.page}>
-        <IntroSkeleton description={false} />
-        <div className={styles.filterSkeletons}>
-          {Array.from({ length: 4 }, (_, index) => (
-            <Skeleton className={styles.filter} key={index} />
-          ))}
-        </div>
-        <div className={styles.grid}>
-          {Array.from({ length: 8 }, (_, index) => (
-            <CardSkeleton key={index} />
-          ))}
-        </div>
-      </div>
+      <CatalogSkeletonContent />
+    </Status>
+  )
+}
+
+export function CatalogPageSkeleton({
+  count,
+  label,
+}: SkeletonStatusProps & { count: number }) {
+  return (
+    <Status label={label}>
+      <CatalogSkeletonContent count={count} />
     </Status>
   )
 }
@@ -196,23 +221,11 @@ export function AppBootstrapSkeleton({
       </div>
       {detail ? (
         <ItemDetailSkeletonContent />
+      ) : catalog ? (
+        <CatalogSkeletonContent />
       ) : (
         <div className={styles.page}>
-          <IntroSkeleton description={!catalog} />
-          {catalog ? (
-            <>
-              <div className={styles.filterSkeletons}>
-                {Array.from({ length: 4 }, (_, index) => (
-                  <Skeleton className={styles.filter} key={index} />
-                ))}
-              </div>
-              <div className={styles.grid}>
-                {Array.from({ length: 8 }, (_, index) => (
-                  <CardSkeleton key={index} />
-                ))}
-              </div>
-            </>
-          ) : null}
+          <IntroSkeleton />
         </div>
       )}
     </Status>
