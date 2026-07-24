@@ -38,6 +38,7 @@ const portfolioIndex = JSON.parse(
 
 for (const shell of [
   'card/index.html',
+  'about/index.html',
   'contact/index.html',
   'crop/index.html',
   'originals/index.html',

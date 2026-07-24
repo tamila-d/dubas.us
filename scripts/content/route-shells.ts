@@ -20,6 +20,7 @@ export async function writeRouteShells(
   const html = await readFile(source, 'utf8')
   const routes = [
     APP_ROUTES.card,
+    APP_ROUTES.about,
     APP_ROUTES.contact,
     APP_ROUTES.crop,
     APP_ROUTES.portfolio,
