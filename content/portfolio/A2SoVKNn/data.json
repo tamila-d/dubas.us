@@ -2,10 +2,12 @@
   "schemaVersion": 1,
   "id": "A2SoVKNn",
   "title": "Holiday on the Corner",
-  "description": "A festive red-brick building and a passing yellow taxi capture the warmth and movement of a city holiday.",
+  "description": "Every holiday season, I look forward to seeing the Cartier Mansion dressed as an enormous gift. This watercolor celebrates one of New York’s most beloved holiday landmarks and the magic it brings to Fifth Avenue.",
   "location": "Rolf’s, New York",
   "createdAt": "2024-12-03",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "A2SoVKNn",
   "crop": {
     "x": 0,

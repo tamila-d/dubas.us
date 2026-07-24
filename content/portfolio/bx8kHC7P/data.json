@@ -2,10 +2,12 @@
   "schemaVersion": 1,
   "id": "bx8kHC7P",
   "title": "Morning at Buunni",
-  "description": "A welcoming neighborhood coffee shop is framed by plants, warm wood, and a cheerful yellow bench.",
+  "description": "Buunni Coffee holds a special place in my heart. It was the home of my very first art show, and the encouragement and support I found there gave me the confidence to keep creating. This painting is a tribute to the community that believed in my work from the very beginning.",
   "location": "Buunni Coffee, Washington Heights, New York",
   "createdAt": "2020-07-24",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "bx8kHC7P",
   "crop": {
     "x": 0,

@@ -1,5 +1,12 @@
 import { Link, useRouteLoaderData } from 'react-router-dom'
+import {
+  FrameIcon,
+  PaintbrushIcon,
+  PaletteIcon,
+  UserRoundIcon,
+} from 'lucide-react'
 import { toast } from 'sonner'
+import { BotanicalSprigIcon } from '@/components/icons/BotanicalSprigIcon'
 import {
   Avatar,
   AvatarFallback,
@@ -13,6 +20,7 @@ import {
 import { APP_ROUTE_IDS, APP_ROUTES } from '@/config/routes'
 import type { CardContent } from '@/content/card-types'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
+import { cn } from '@/lib/utils'
 import styles from './HomePage.module.css'
 
 const profileLinkClassName = buttonVariants({
@@ -20,27 +28,38 @@ const profileLinkClassName = buttonVariants({
   variant: 'profile',
 })
 
-const portraitSizes = '(max-width: 640px) 140px, 192px'
+const portraitSizes = '(max-width: 640px) 144px, 168px'
 const linksAriaLabel = 'Artist links'
-const unavailableMessage = 'This section is under development.'
-const unavailableLinks = [
+const pageLinks = [
   {
     id: 'portfolio',
-    label: 'Portfolio',
+    icon: PaletteIcon,
+    label: 'Original Art',
     href: APP_ROUTES.portfolio,
-    unavailable: false,
+    unavailableMessage: null,
   },
   {
     id: 'store',
-    label: 'Store',
+    icon: FrameIcon,
+    label: 'Fine Art Prints',
     href: APP_ROUTES.store,
-    unavailable: true,
+    unavailableMessage:
+      'Fine art prints with size selection and Venmo checkout are coming soon.',
   },
   {
-    id: 'contact',
-    label: 'Contact Me',
-    href: APP_ROUTES.contact,
-    unavailable: false,
+    id: 'commissions',
+    icon: PaintbrushIcon,
+    label: 'Commissions',
+    href: APP_ROUTES.commissions,
+    unavailableMessage:
+      'Commission details and pricing are coming soon.',
+  },
+  {
+    id: 'about',
+    icon: UserRoundIcon,
+    label: 'About Me',
+    href: APP_ROUTES.about,
+    unavailableMessage: null,
   },
 ] as const
 
@@ -60,43 +79,35 @@ export function HomePage() {
   )
   const initials =
     `${info.artist.firstName[0] ?? ''}${info.artist.lastName[0] ?? ''}`
-  const links = [
-    {
-      id: 'instagram',
-      label: 'Instagram',
-      href: info.links.instagram,
-      unavailable: false,
-    },
-    ...unavailableLinks,
-  ] as const
-
   useDocumentTitle(`${displayName} — ${documentRole}`)
 
   return (
     <section className={styles.page} aria-labelledby="artist-name">
       <div className={styles.profileCard}>
-        <Avatar className={styles.portrait}>
-          <picture className="contents">
-            <source
-              type="image/webp"
-              {...responsiveImageSourceProps(
-                portrait,
-                'card',
-                'image/webp',
-              )}
-              sizes={portraitSizes}
-            />
-            <AvatarImage
-              className={styles.portraitImage}
-              {...responsiveImageFallbackProps(portrait, 'card')}
-              alt={portrait.alt}
-              fetchPriority="high"
-              loading="eager"
-              sizes={portraitSizes}
-            />
-          </picture>
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
+        <div className={styles.hero}>
+          <Avatar className={styles.portrait}>
+            <picture className="contents">
+              <source
+                type="image/webp"
+                {...responsiveImageSourceProps(
+                  portrait,
+                  'card',
+                  'image/webp',
+                )}
+                sizes={portraitSizes}
+              />
+              <AvatarImage
+                className={styles.portraitImage}
+                {...responsiveImageFallbackProps(portrait, 'card')}
+                alt={portrait.alt}
+                fetchPriority="high"
+                loading="eager"
+                sizes={portraitSizes}
+              />
+            </picture>
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+        </div>
 
         <header className={styles.identity}>
           <h1 id="artist-name">
@@ -113,48 +124,71 @@ export function HomePage() {
               width={signature.width}
             />
           </h1>
-          <p>{info.artist.role}</p>
         </header>
+
+        <div className={styles.roleSection}>
+          <p>{info.artist.role}</p>
+          <div className={styles.branchDivider} aria-hidden="true">
+            <span />
+            <BotanicalSprigIcon />
+            <span />
+          </div>
+        </div>
 
         <nav className={styles.links} aria-label={linksAriaLabel}>
           <ul className={styles.linkList}>
-            {links.map((link) => (
+            {pageLinks.map((link) => (
               <li className={styles.linkItem} key={link.id}>
-                {link.unavailable ? (
+                {link.unavailableMessage !== null ? (
                   <a
                     aria-disabled="true"
-                    className={profileLinkClassName}
+                    className={cn(
+                      profileLinkClassName,
+                      styles.profileLink,
+                    )}
                     href={link.href}
                     onClick={(event) => {
                       event.preventDefault()
-                      toast.info(unavailableMessage)
+                      toast.info(link.unavailableMessage)
                     }}
                   >
+                    <link.icon
+                      aria-hidden="true"
+                      data-icon="inline-start"
+                    />
                     {link.label}
                   </a>
-                ) : link.id === 'contact' || link.id === 'portfolio' ? (
+                ) : (
                   <Link
-                    className={profileLinkClassName}
+                    className={cn(
+                      profileLinkClassName,
+                      styles.profileLink,
+                    )}
                     to={link.href}
                   >
+                    <link.icon
+                      aria-hidden="true"
+                      data-icon="inline-start"
+                    />
                     {link.label}
                   </Link>
-                ) : (
-                  <a
-                    className={profileLinkClassName}
-                    href={link.href}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {link.label}
-                  </a>
                 )}
               </li>
             ))}
           </ul>
         </nav>
 
-        <p className={styles.handle}>{info.artist.handle}</p>
+        <footer className={styles.footer}>
+          <a
+            aria-label={`Open ${info.artist.handle} on Instagram`}
+            className={styles.handle}
+            href={info.links.instagram}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {info.artist.handle}
+          </a>
+        </footer>
       </div>
     </section>
   )

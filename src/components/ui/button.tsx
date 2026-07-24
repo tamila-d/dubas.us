@@ -38,7 +38,7 @@ const buttonVariants = cva(
         touch:
           "h-(--touch-target) gap-1.5 px-4 has-data-[icon=inline-end]:pr-3.5 has-data-[icon=inline-start]:pl-3.5",
         profile:
-          "h-11 w-full rounded-xl! px-6 text-[0.68rem] font-medium tracking-[0.22em] uppercase min-[400px]:text-xs sm:h-[clamp(2.75rem,6.4dvh,4rem)] sm:px-8 sm:text-sm",
+          "h-11 w-full rounded-xl! px-6 text-[0.68rem] font-medium tracking-[0.22em] uppercase min-[400px]:text-xs sm:h-[clamp(2.75rem,6.4dvh,4rem)] sm:px-8 sm:text-sm [&_svg:not([class*='size-'])]:size-5",
       },
     },
     defaultVariants: {

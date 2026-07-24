@@ -2,10 +2,12 @@
   "schemaVersion": 1,
   "id": "WbRVG7y4",
   "title": "Friends by the Stream",
-  "description": "A girl and her tiger companion share a bright woodland moment beside a gently flowing stream.",
+  "description": "Inspired by the beloved Calvin and Hobbes comics, this commissioned piece was created for new parents who wanted to share a favorite part of their childhood with their daughter. It’s a celebration of imagination, friendship, and traditions that live on through family.",
   "location": "Fort Tryon Park, New York",
   "createdAt": "2021-09-09",
   "type": "illustrations",
+  "availableForPurchase": false,
+  "commissioned": true,
   "image": "WbRVG7y4",
   "crop": {
     "x": 0,

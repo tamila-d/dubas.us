@@ -1,55 +1,82 @@
 .page {
-  --portrait-size: clamp(140px, 20dvh, 192px);
+  --portrait-size: clamp(118px, 19dvh, 168px);
 
-  display: flex;
+  position: relative;
+  display: grid;
+  width: 100%;
   height: 100svh;
   height: 100dvh;
   min-height: 0;
   padding:
-    clamp(130px, 24dvh, 230px)
-    0
-    clamp(16px, 3dvh, 32px);
-  align-items: flex-start;
-  justify-content: center;
+    max(12px, env(safe-area-inset-top))
+    max(20px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-left));
+  place-items: center;
   overflow: hidden;
-  background:
-    linear-gradient(to bottom, var(--muted), transparent 22svh),
-    radial-gradient(
-      circle at 18% 9%,
-      color-mix(in srgb, var(--background) 84%, transparent),
-      transparent 26%
-    ),
-    linear-gradient(135deg, var(--muted), var(--background));
+  color: var(--foreground);
+  background: var(--background);
+  isolation: isolate;
 }
 
 .profileCard {
   position: relative;
-  display: flex;
-  width: min(calc(100% - clamp(32px, 8vw, 96px)), 900px);
+  z-index: 1;
+  display: grid;
+  width: min(100%, 510px);
   height: 100%;
   min-height: 0;
-  padding:
-    clamp(76px, 12dvh, 112px)
-    clamp(28px, 7vw, 86px)
-    clamp(22px, 4dvh, 44px);
-  align-items: center;
-  flex-direction: column;
-  border-radius: clamp(36px, 4vw, 58px);
-  color: var(--card-foreground);
-  background: var(--card);
-  box-shadow: 0 28px 80px
-    color-mix(in srgb, var(--foreground) 13%, transparent);
+  grid-template-rows:
+    minmax(0, 27fr)
+    minmax(0, 15fr)
+    minmax(0, 8fr)
+    minmax(0, 36fr)
+    minmax(0, 14fr);
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  padding-top: clamp(16px, 4.5dvh, 36px);
+  place-items: center;
+}
+
+.hero::before {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  width: clamp(80px, 14dvh, 126px);
+  aspect-ratio: 958 / 817;
+  background: var(--primary);
+  content: '';
+  filter: blur(0.8px);
+  mask:
+    url('../../assets/paint-splatter.svg')
+    center / contain
+    no-repeat;
+  opacity: 0.23;
+  pointer-events: none;
+  transform: translate(-205%, 0) rotate(-9deg);
+  -webkit-mask:
+    url('../../assets/paint-splatter.svg')
+    center / contain
+    no-repeat;
 }
 
 .portrait {
-  position: absolute;
-  top: calc(var(--portrait-size) / -2);
-  left: 50%;
+  position: relative;
+  z-index: 1;
   width: var(--portrait-size);
   height: var(--portrait-size);
-  transform: translateX(-50%);
-  box-shadow: 0 16px 40px
-    color-mix(in srgb, var(--foreground) 18%, transparent);
+  flex: none;
+  border: 1px solid
+    color-mix(in oklch, var(--primary) 48%, transparent);
+  box-shadow:
+    0 0 0 5px
+      color-mix(in oklch, var(--primary) 8%, transparent),
+    0 14px 34px
+      color-mix(in srgb, var(--foreground) 12%, transparent);
 }
 
 .portraitImage {
@@ -58,13 +85,16 @@
 
 .identity {
   display: flex;
+  width: 100%;
+  min-height: 0;
   align-items: center;
   flex-direction: column;
+  justify-content: center;
   text-align: center;
 }
 
 .identity h1 {
-  width: min(100%, clamp(360px, 55dvh, 610px));
+  width: min(100%, clamp(310px, 48dvh, 460px));
   margin: 0;
 }
 
@@ -73,25 +103,89 @@
   height: auto;
 }
 
-.identity p {
-  margin: clamp(8px, 2dvh, 22px) 0 0;
-  color: var(--muted-foreground);
-  font-size: 0.78rem;
+.roleSection {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  align-items: center;
+  flex-direction: column;
+  isolation: isolate;
+  justify-content: center;
+}
+
+.roleSection::before {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  z-index: 0;
+  width: clamp(76px, 11dvh, 104px);
+  aspect-ratio: 508 / 392;
+  background: var(--primary);
+  content: '';
+  filter: blur(0.8px);
+  mask:
+    url('../../assets/paint-splatter-radial-a.svg')
+    center / contain
+    no-repeat;
+  opacity: 0.18;
+  pointer-events: none;
+  transform: translate(132%, -38%) rotate(-11deg);
+  -webkit-mask:
+    url('../../assets/paint-splatter-radial-a.svg')
+    center / contain
+    no-repeat;
+}
+
+.roleSection p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--primary);
+  font-size: clamp(0.62rem, 1.4dvh, 0.76rem);
   font-weight: 500;
   letter-spacing: 0.36em;
   text-transform: uppercase;
 }
 
+.branchDivider {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(58%, 240px);
+  margin-top: clamp(7px, 1.2dvh, 12px);
+  align-items: center;
+  gap: clamp(8px, 2vw, 14px);
+  color: var(--primary);
+}
+
+.branchDivider span {
+  height: 1px;
+  flex: 1;
+  background: color-mix(in srgb, var(--primary) 62%, transparent);
+}
+
+.branchDivider svg {
+  display: block;
+  width: clamp(72px, 9dvh, 96px);
+  height: auto;
+  flex: none;
+}
+
 .links {
-  width: min(100%, 510px);
-  margin-top: clamp(18px, 3.4dvh, 48px);
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  place-items: center;
 }
 
 .linkList {
   display: grid;
+  width: min(100%, 440px);
   margin: 0;
   padding: 0;
-  gap: clamp(7px, 1.1dvh, 14px);
+  gap: clamp(6px, 1.1dvh, 11px);
   list-style: none;
 }
 
@@ -101,118 +195,159 @@
   border-radius: var(--radius-xl);
   color: var(--primary-foreground);
   background: var(--primary);
+  box-shadow: 0 8px 18px
+    color-mix(in srgb, var(--primary) 20%, transparent);
 }
 
 .linkItem a {
   text-decoration: none;
 }
 
+.profileLink {
+  position: relative;
+}
+
+.profileLink > svg {
+  position: absolute;
+  left: clamp(18px, 5vw, 30px);
+}
+
+.footer {
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  flex-direction: column;
+  isolation: isolate;
+  justify-content: center;
+}
+
+.footer::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: clamp(80px, 12dvh, 110px);
+  aspect-ratio: 430 / 396;
+  background: var(--primary);
+  content: '';
+  filter: blur(0.8px);
+  mask:
+    url('../../assets/paint-splatter-radial-b.svg')
+    center / contain
+    no-repeat;
+  opacity: 0.17;
+  pointer-events: none;
+  transform: translate(-168%, -47%) rotate(17deg);
+  -webkit-mask:
+    url('../../assets/paint-splatter-radial-b.svg')
+    center / contain
+    no-repeat;
+}
+
 .handle {
-  margin: auto 0 0;
-  padding-top: clamp(12px, 3dvh, 32px);
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
   color: var(--foreground);
-  font-size: 0.95rem;
+  font-size: clamp(0.78rem, 1.9dvh, 0.95rem);
   letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
 @media (max-width: 640px) {
   .page {
-    --portrait-size: clamp(108px, 18svh, 140px);
+    --portrait-size: clamp(104px, 18dvh, 144px);
 
-    height: 100svh;
-    height: 100dvh;
-    min-height: 100svh;
-    min-height: 100dvh;
-    padding: clamp(100px, 20svh, 172px) 0 0;
+    padding-right: max(18px, env(safe-area-inset-right));
+    padding-left: max(18px, env(safe-area-inset-left));
     overscroll-behavior: none;
-    background:
-      linear-gradient(
-        to top,
-        var(--muted) 0,
-        var(--muted) 64px,
-        transparent 112px
-      ),
-      linear-gradient(to bottom, var(--muted), transparent 22svh),
-      radial-gradient(
-        circle at 18% 9%,
-        color-mix(in srgb, var(--background) 84%, transparent),
-        transparent 26%
-      ),
-      linear-gradient(135deg, var(--muted), var(--background));
   }
 
   .profileCard {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    padding:
-      clamp(52px, 8svh, 68px)
-      24px
-      max(clamp(18px, 3svh, 26px), calc(env(safe-area-inset-bottom) + 14px));
-    border-radius: clamp(32px, 10vw, 42px);
-    box-shadow: 0 -18px 52px
-      color-mix(in srgb, var(--foreground) 10%, transparent);
+    width: min(100%, 86vw);
   }
 
-  .portrait {
-    top: calc(clamp(54px, 9svh, 70px) * -1);
-    width: var(--portrait-size);
-    height: var(--portrait-size);
-  }
-
-  .identity p {
-    margin-top: clamp(6px, 1.3svh, 12px);
-    font-size: clamp(0.58rem, 2.7vw, 0.7rem);
-    letter-spacing: 0.3em;
-  }
-
-  .links {
-    width: min(100%, 78vw);
-    margin-top: clamp(12px, 2.2svh, 20px);
-  }
-
-  .linkList {
-    gap: clamp(6px, 1svh, 9px);
-  }
-
-  .handle {
-    padding-top: clamp(12px, 2svh, 18px);
-    font-size: clamp(0.75rem, 3.5vw, 0.9rem);
-  }
-}
-
-@media (min-width: 641px) and (max-height: 680px) {
-  .page {
-    --portrait-size: clamp(112px, 19dvh, 128px);
-
-    padding:
-      clamp(100px, 20dvh, 130px)
-      0
-      12px;
-  }
-
-  .profileCard {
-    padding-top: clamp(60px, 10dvh, 68px);
-    padding-bottom: 18px;
+  .hero {
+    padding-top: clamp(14px, 5dvh, 40px);
   }
 
   .identity h1 {
-    width: min(100%, 320px);
+    width: min(100%, 330px);
   }
 
-  .identity p {
-    margin-top: 6px;
+  .roleSection p {
+    font-size: clamp(0.58rem, 2.7vw, 0.68rem);
+    letter-spacing: 0.3em;
+  }
+
+  .branchDivider {
+    width: min(62%, 220px);
   }
 
   .links {
-    margin-top: 12px;
+    width: 100%;
   }
 
   .linkList {
-    gap: 6px;
+    gap: clamp(5px, 0.8dvh, 8px);
+  }
+
+  .footer {
+    min-height: 0;
   }
 
   .handle {
+    min-height: 28px;
+    font-size: clamp(0.75rem, 3.5vw, 0.88rem);
+  }
+}
+
+@media (max-height: 620px) {
+  .page {
+    --portrait-size: clamp(94px, 17dvh, 108px);
+  }
+
+  .profileCard {
+    grid-template-rows:
+      minmax(0, 27fr)
+      minmax(0, 15fr)
+      minmax(0, 8fr)
+      minmax(0, 36fr)
+      minmax(0, 14fr);
+  }
+
+  .hero {
     padding-top: 8px;
+  }
+
+  .identity h1 {
+    width: min(100%, 270px);
+  }
+
+  .branchDivider {
+    margin-top: 4px;
+  }
+
+  .links {
+    margin: 0;
+  }
+
+  .linkList {
+    gap: 4px;
+  }
+
+  .footer {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .handle {
+    min-height: 24px;
   }
 }

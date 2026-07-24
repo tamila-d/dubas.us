@@ -14,7 +14,7 @@ assert.match(rootShell, /(?:src|href)="\/assets\//)
 assert.doesNotMatch(rootShell, /(?:src|href)="(?!\/|https?:|mailto:|#)/)
 assert.match(rootShell, /id="app-boot"/)
 assert.match(rootShell, /<title>Tamila Dubas<\/title>/)
-assert.match(rootShell, /phone \? '\/card' : '\/portfolio'/)
+assert.match(rootShell, /phone \? '\/card' : '\/originals'/)
 assert.match(
   scriptEnabledRootShell,
   /<link rel="preload" as="style"[^>]* data-app-stylesheet /,
@@ -40,12 +40,12 @@ for (const shell of [
   'card/index.html',
   'contact/index.html',
   'crop/index.html',
-  'portfolio/index.html',
+  'originals/index.html',
   ...portfolioIndex.items.map(
     ({ id }) => `crop/${id}/index.html`,
   ),
   ...portfolioIndex.items.map(
-    ({ id }) => `portfolio/${id}/index.html`,
+    ({ id }) => `originals/${id}/index.html`,
   ),
   '404.html',
 ]) {
@@ -93,8 +93,8 @@ const robots = await readFile(join(outputRoot, 'robots.txt'), 'utf8')
 assert.equal(robots, 'User-agent: *\nDisallow: /crop\n')
 
 const favicon = await readFile(join(outputRoot, 'favicon.svg'), 'utf8')
-assert.match(favicon, /<rect[^>]+fill="#000"/)
-assert.match(favicon, /<path[^>]+fill="#fff"/)
+assert.match(favicon, /<rect[^>]+fill="#3f513f"/)
+assert.match(favicon, /<path[^>]+fill="#f7f3ea"/)
 assert.doesNotMatch(favicon, /<image|data:image\//)
 assert.ok(
   Buffer.byteLength(favicon) <= 2 * 1024,

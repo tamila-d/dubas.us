@@ -4,7 +4,7 @@
   --color-text-muted: var(--muted-foreground);
   --color-border-strong: var(--input);
   --color-accent-strong: var(--foreground);
-  --color-accent-soft: var(--muted);
+  --color-accent-soft: var(--accent);
 
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 

@@ -2,10 +2,12 @@
   "schemaVersion": 1,
   "id": "FRP3sv9X",
   "title": "Stay Amazing",
-  "description": "A lively city street stretches beneath an elevated passage, centered on a small message of encouragement.",
+  "description": "Inspired by the familiar sign on 168th Street at Columbia Presbyterian, this painting captures a view that has always made me smile. A simple message, seen on countless walks and bike rides, serves as a quiet reminder to pause, look up, and appreciate the day.",
   "location": "Columbia University Irving Medical Center, New York",
   "createdAt": "2025-02-11",
   "type": "places",
+  "availableForPurchase": true,
+  "commissioned": false,
   "image": "FRP3sv9X",
   "crop": {
     "x": 0,

@@ -36,7 +36,7 @@ import styles from './ContactInfoPage.module.css'
 
 const contactLinkClassName = buttonVariants({
   size: 'touch',
-  variant: 'outline',
+  variant: 'ghost',
 })
 const portraitSizes = '(max-width: 899px) 64px, 80px'
 const downloadErrorMessage =
@@ -70,7 +70,7 @@ export function ContactInfoPage() {
     (source) => source.type === 'image/jpeg' && source.width === 320,
   )
 
-  useDocumentTitle(`Contact ${displayName}`)
+  useDocumentTitle(`About ${displayName}`)
 
   const handleDownload = async () => {
     if (downloading) return
@@ -102,11 +102,11 @@ export function ContactInfoPage() {
   }
 
   return (
-    <section className={styles.page} aria-labelledby="contact-title">
+    <section className={styles.page} aria-labelledby="about-title">
       <div className={styles.shell}>
         <header className={styles.hero}>
-          <h1 id="contact-title">Contact</h1>
-          <p>For artwork, commissions, and collaborations.</p>
+          <h1 id="about-title">About Me</h1>
+          <p>Watercolor, original artwork, and ways to stay in touch.</p>
         </header>
 
         <div className={styles.cardGrid}>
@@ -176,12 +176,12 @@ export function ContactInfoPage() {
             </CardHeader>
             <CardContent>
               <p className={styles.saveDescription}>
-                Keep my details close, and feel free to reach out about
-                original artwork, commissions, or a creative collaboration.
-                I’d love to hear from you.
+                I paint city scenes, animals, and the small moments that
+                make a place feel personal. Keep my details close, and feel
+                free to reach out about an original or a future commission.
               </p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className={styles.saveFooter}>
               <Button
                 aria-busy={downloading || undefined}
                 className={styles.downloadButton}

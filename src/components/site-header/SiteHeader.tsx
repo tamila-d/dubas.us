@@ -30,7 +30,7 @@ export function SiteHeader({
           <PortfolioBackButton className={styles.mobileBack} />
         ) : null}
         <Link
-          aria-label={`${artistName} — Portfolio`}
+          aria-label={`${artistName} — Original Art`}
           className={cn(
             brandClassName,
             styles.brand,
@@ -41,7 +41,7 @@ export function SiteHeader({
           <img
             aria-hidden="true"
             className={styles.brandIcon}
-            src="/favicon.svg"
+            src="/favicon.svg?v=2"
           />
           <span className={styles.brandName}>{artistName}</span>
         </Link>
@@ -58,7 +58,7 @@ export function SiteHeader({
                 }
                 to={APP_ROUTES.portfolio}
               >
-                Portfolio
+                Original Art
               </NavLink>
             </li>
             <li>
@@ -71,9 +71,9 @@ export function SiteHeader({
                   )
                 }
                 end
-                to={APP_ROUTES.contact}
+                to={APP_ROUTES.about}
               >
-                Contact
+                About Me
               </NavLink>
             </li>
           </ul>

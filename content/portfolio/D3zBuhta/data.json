@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "D3zBuhta",
-  "title": "The Garden Path",
-  "description": "A sunlit path winds through fresh green trees and violet flowers toward the distant outline of a bridge.",
+  "title": "The garden path",
+  "description": "Inspired by Fort Tryon Park in full bloom, this watercolor celebrates one of my favorite places in the city. Lush greenery, vibrant flowers, and a glimpse of the George Washington Bridge come together to capture the feeling of spring at its brightest.",
   "location": "Fort Tryon Park, New York",
   "createdAt": "2022-06-27",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "D3zBuhta",
   "crop": {
     "x": 0,

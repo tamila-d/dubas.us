@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "KuZENN2d",
-  "title": "Winter in the City",
-  "description": "A snow-covered bridge crosses reflective water while the city rises through a softly falling winter sky.",
+  "title": "Gapstow bridge",
+  "description": "Inspired by a snowy evening in Central Park, this painting explores the contrast between the cool tones of winter and the warm glow of city lights. Using a limited color palette, I wanted to capture the quiet beauty of snow illuminated by the evening sky.",
   "location": "Gapstow Bridge, Central Park, New York",
   "createdAt": "2020-01-29",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "KuZENN2d",
   "crop": {
     "x": 0,

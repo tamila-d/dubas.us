@@ -73,6 +73,10 @@ function cardRedirectLoader() {
   throw redirect(APP_ROUTES.card)
 }
 
+function aboutRedirectLoader() {
+  throw redirect(APP_ROUTES.about)
+}
+
 function canonicalPathname(pathname: string): string {
   return pathname === '/' ? pathname : pathname.replace(/\/+$/, '')
 }
@@ -168,8 +172,12 @@ export const appRouter = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: APP_ROUTES.contact,
+        path: APP_ROUTES.about,
         element: <ContactInfoPage />,
+      },
+      {
+        path: APP_ROUTES.contact,
+        loader: aboutRedirectLoader,
       },
       {
         path: APP_ROUTES.portfolio,

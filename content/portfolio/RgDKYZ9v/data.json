@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "RgDKYZ9v",
-  "title": "Neighborhood Kitchen",
-  "description": "A colorful corner restaurant sits beneath leafy branches, with two small tables waiting on the sidewalk.",
+  "title": "Dutch baby",
+  "description": "Nestled in Washington Heights, Dutch Baby Kitchen is a neighborhood café full of warmth and personality. I wanted to capture the vibrant storefront, the dappled light beneath the tree, and the inviting atmosphere that makes this little corner of the city so special.",
   "location": "Dutch Baby, Washington Heights, New York",
   "createdAt": "2024-04-21",
   "type": "places",
+  "availableForPurchase": true,
+  "commissioned": false,
   "image": "RgDKYZ9v",
   "crop": {
     "x": 0,

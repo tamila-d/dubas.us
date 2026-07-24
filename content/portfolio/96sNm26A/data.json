@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "96sNm26A",
-  "title": "Autumn by the Lake",
-  "description": "A quiet park bench rests beneath golden trees, looking out toward calm water on a warm autumn day.",
+  "title": "Linden terrace in autumn",
+  "description": "Inspired by Linden Terrace in Fort Tryon Park, this painting captures a place that has become deeply meaningful to me. A close friend first introduced me to this quiet overlook, and it has since become our favorite spot to share morning coffee, conversation, and the changing seasons.",
   "location": "The Lake, Central Park, New York",
   "createdAt": "2023-10-14",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "96sNm26A",
   "crop": {
     "x": 0,

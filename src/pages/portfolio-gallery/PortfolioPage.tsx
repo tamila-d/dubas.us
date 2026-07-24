@@ -18,6 +18,7 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import {
   Empty,
   EmptyDescription,
@@ -61,6 +62,8 @@ const ArtworkViewer = lazy(() =>
 )
 
 const allTypes = 'all'
+const availableFilter = 'available'
+const selectionViewerMode = 'selection'
 const initialVisibleCount = 12
 const revealCount = 8
 const visibleCountByType = new Map<string, number>()
@@ -99,6 +102,14 @@ function PortfolioWork({
               pictureClassName={styles.picture}
               tier="card"
             />
+            <Badge
+              className={styles.availabilityBadge}
+              variant={
+                item.availableForPurchase ? 'default' : 'secondary'
+              }
+            >
+              {item.availableForPurchase ? 'Available' : 'Sold'}
+            </Badge>
           </div>
           <div className={styles.caption}>
             <h2>{item.title}</h2>
@@ -131,26 +142,32 @@ export function PortfolioPage() {
     [items],
   )
   const requestedType = searchParams.get('type')
+  const requestedAvailability = searchParams.get('availability')
   const selectedType =
     requestedType !== null && availableTypes.has(requestedType)
       ? requestedType
       : allTypes
+  const availableOnly = requestedAvailability === availableFilter
+  const selectedFilter = availableOnly ? availableFilter : selectedType
   const filteredItems = useMemo(
     () =>
-      selectedType === allTypes
-        ? items
-        : items.filter((item) => item.type === selectedType),
-    [items, selectedType],
+      items.filter(
+        (item) =>
+          availableOnly
+            ? item.availableForPurchase
+            : selectedType === allTypes || item.type === selectedType,
+      ),
+    [availableOnly, items, selectedType],
   )
   const [visibleCount, setVisibleCount] = useState(
-    () => visibleCountByType.get(selectedType) ?? initialVisibleCount,
+    () => visibleCountByType.get(selectedFilter) ?? initialVisibleCount,
   )
   const sentinelRef = useRef<HTMLDivElement>(null)
   const visibleItems = filteredItems.slice(0, visibleCount)
   const hasMore = visibleCount < filteredItems.length
   const viewerImages = useMemo(
-    () => items.map((item) => item.image),
-    [items],
+    () => filteredItems.map((item) => item.image),
+    [filteredItems],
   )
   const viewerImageIds = useMemo(
     () => new Set(viewerImages.map((image) => image.id)),
@@ -164,7 +181,7 @@ export function PortfolioPage() {
       ? requestedViewerImage
       : viewerImages[0]?.id
   const viewerOpen =
-    requestedViewerMode === 'all' &&
+    requestedViewerMode === selectionViewerMode &&
     selectedViewerId !== undefined
   const selectedViewerImage = viewerImages.find(
     (image) => image.id === selectedViewerId,
@@ -172,16 +189,31 @@ export function PortfolioPage() {
   const displayName = `${info.artist.firstName} ${info.artist.lastName}`
   const returnTo = `${location.pathname}${location.search}`
 
-  useDocumentTitle(`Portfolio — ${displayName}`)
+  useDocumentTitle(`Original Art — ${displayName}`)
 
   useEffect(() => {
-    if (requestedType !== null && !availableTypes.has(requestedType)) {
+    const invalidType =
+      requestedType !== null && !availableTypes.has(requestedType)
+    const invalidAvailability =
+      requestedAvailability !== null &&
+      requestedAvailability !== availableFilter
+    const combinedFilters =
+      requestedAvailability === availableFilter &&
+      requestedType !== null
+
+    if (invalidType || invalidAvailability || combinedFilters) {
       const nextSearchParams = new URLSearchParams(searchParams)
-      nextSearchParams.delete('type')
+      if (invalidType || combinedFilters) {
+        nextSearchParams.delete('type')
+      }
+      if (invalidAvailability) {
+        nextSearchParams.delete('availability')
+      }
       setSearchParams(nextSearchParams, { replace: true })
     }
   }, [
     availableTypes,
+    requestedAvailability,
     requestedType,
     searchParams,
     setSearchParams,
@@ -189,15 +221,15 @@ export function PortfolioPage() {
 
   useEffect(() => {
     const needsSelectedImage =
-      requestedViewerMode === 'all' &&
+      requestedViewerMode === selectionViewerMode &&
       selectedViewerId !== undefined &&
       requestedViewerImage !== selectedViewerId
     const hasInvalidViewerQuery =
       (requestedViewerMode !== null &&
-        requestedViewerMode !== 'all') ||
-      (requestedViewerMode !== 'all' &&
+        requestedViewerMode !== selectionViewerMode) ||
+      (requestedViewerMode !== selectionViewerMode &&
         requestedViewerImage !== null) ||
-      (requestedViewerMode === 'all' &&
+      (requestedViewerMode === selectionViewerMode &&
         selectedViewerId === undefined)
 
     if (!needsSelectedImage && !hasInvalidViewerQuery) return
@@ -225,13 +257,13 @@ export function PortfolioPage() {
 
   useEffect(() => {
     setVisibleCount(
-      visibleCountByType.get(selectedType) ?? initialVisibleCount,
+      visibleCountByType.get(selectedFilter) ?? initialVisibleCount,
     )
-  }, [selectedType])
+  }, [selectedFilter])
 
   useEffect(() => {
-    visibleCountByType.set(selectedType, visibleCount)
-  }, [selectedType, visibleCount])
+    visibleCountByType.set(selectedFilter, visibleCount)
+  }, [selectedFilter, visibleCount])
 
   const revealMore = useCallback(() => {
     setVisibleCount((count) =>
@@ -257,15 +289,26 @@ export function PortfolioPage() {
     return () => observer.disconnect()
   }, [hasMore, revealMore])
 
-  const selectType = (values: string[]) => {
-    const nextType = values.at(-1) ?? allTypes
+  const selectFilter = (values: string[]) => {
+    const nextFilter = values.at(-1) ?? allTypes
     const nextSearchParams = new URLSearchParams(searchParams)
-    if (nextType === allTypes) {
+
+    if (nextFilter === availableFilter) {
       nextSearchParams.delete('type')
-      setSearchParams(nextSearchParams)
-      return
+      nextSearchParams.set('availability', availableFilter)
+    } else {
+      nextSearchParams.delete('availability')
     }
-    nextSearchParams.set('type', nextType)
+
+    if (
+      nextFilter === allTypes ||
+      nextFilter === availableFilter
+    ) {
+      nextSearchParams.delete('type')
+    } else {
+      nextSearchParams.set('type', nextFilter)
+    }
+
     setSearchParams(nextSearchParams)
   }
 
@@ -275,7 +318,7 @@ export function PortfolioPage() {
 
     void loadArtworkViewer().then(() => {
       const nextSearchParams = new URLSearchParams(searchParams)
-      nextSearchParams.set('view', 'all')
+      nextSearchParams.set('view', selectionViewerMode)
       nextSearchParams.set('image', firstImage.id)
       setSearchParams(nextSearchParams, {
         preventScrollReset: true,
@@ -307,7 +350,7 @@ export function PortfolioPage() {
 
   const selectViewerImage = (imageId: string) => {
     const nextSearchParams = new URLSearchParams(searchParams)
-    nextSearchParams.set('view', 'all')
+    nextSearchParams.set('view', selectionViewerMode)
     nextSearchParams.set('image', imageId)
     setSearchParams(nextSearchParams, {
       preventScrollReset: true,
@@ -334,16 +377,17 @@ export function PortfolioPage() {
       label: typeLabels[type],
       value: type,
     })),
+    { label: 'Available', value: availableFilter },
   ]
   const selectedFilterLabel =
-    filterOptions.find((option) => option.value === selectedType)
+    filterOptions.find((option) => option.value === selectedFilter)
       ?.label ?? 'All'
 
   return (
-    <section className={styles.page} aria-labelledby="portfolio-title">
+    <section className={styles.page} aria-labelledby="original-art-title">
       <div className={styles.shell}>
         <header className={styles.intro}>
-          <h1 id="portfolio-title">Portfolio</h1>
+          <h1 id="original-art-title">Original Art</h1>
         </header>
 
         <div className={styles.toolbar}>
@@ -361,10 +405,10 @@ export function PortfolioPage() {
                   initialOpen
                   label={selectedFilterLabel}
                   onValueChange={(value) => {
-                    selectType([value])
+                    selectFilter([value])
                   }}
                   options={filterOptions}
-                  value={selectedType}
+                  value={selectedFilter}
                 />
               </Suspense>
             ) : (
@@ -384,10 +428,10 @@ export function PortfolioPage() {
 
           <div className={styles.filterTabs}>
             <ToggleGroup
-              aria-label="Filter portfolio by type"
-              onValueChange={selectType}
+              aria-label="Filter original art"
+              onValueChange={selectFilter}
               size="lg"
-              value={[selectedType]}
+              value={[selectedFilter]}
               variant="primary"
             >
               {filterOptions.map((option) => (
@@ -402,7 +446,9 @@ export function PortfolioPage() {
           </div>
 
           <Button
+            aria-label="View filtered artwork"
             className={styles.viewerButton}
+            disabled={viewerImages.length === 0}
             onClick={openViewer}
             onFocus={() => void loadArtworkViewer()}
             onPointerDown={() => void loadArtworkViewer()}
@@ -412,7 +458,7 @@ export function PortfolioPage() {
             type="button"
           >
             <ImagesIcon aria-hidden="true" data-icon="inline-start" />
-            View all
+            View
           </Button>
         </div>
 
@@ -451,7 +497,7 @@ export function PortfolioPage() {
       {viewerOpen && selectedViewerImage !== undefined ? (
         <Suspense fallback={null}>
           <ArtworkViewer
-            closeImageLabel="Close portfolio viewer"
+            closeImageLabel="Close original art viewer"
             finalFocus={viewerButtonRef}
             images={viewerImages}
             labels={artworkViewerLabels}
@@ -459,7 +505,7 @@ export function PortfolioPage() {
             onOpenDetails={openViewerImageDetails}
             onSelectImage={selectViewerImage}
             selectedId={selectedViewerId}
-            title="Portfolio viewer"
+            title="Original art selection"
           />
         </Suspense>
       ) : null}

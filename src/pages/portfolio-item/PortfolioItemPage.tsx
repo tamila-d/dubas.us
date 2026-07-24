@@ -1,6 +1,4 @@
 import {
-  lazy,
-  Suspense,
   useRef,
   useState,
 } from 'react'
@@ -12,7 +10,6 @@ import {
   useLoaderData,
   useRouteLoaderData,
 } from 'react-router-dom'
-import { ArtworkViewerFallback } from '@/components/loading/ArtworkViewerFallback'
 import { ResponsiveImage } from '@/components/media/ResponsiveImage'
 import { PortfolioBackButton } from '@/components/navigation/PortfolioBackButton'
 import { Badge } from '@/components/ui/badge'
@@ -32,11 +29,26 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { cn } from '@/lib/utils'
 import styles from './PortfolioItemPage.module.css'
 
-const ArtworkViewer = lazy(() =>
-  import('@/features/item-viewer/ArtworkViewer').then(
-    ({ ArtworkViewer }) => ({ default: ArtworkViewer }),
-  ),
-)
+type ArtworkViewerComponent =
+  typeof import('@/features/item-viewer/ArtworkViewer')['ArtworkViewer']
+
+let artworkViewerComponent: ArtworkViewerComponent | undefined
+let artworkViewerPromise: Promise<ArtworkViewerComponent> | undefined
+
+function loadArtworkViewer(): Promise<ArtworkViewerComponent> {
+  if (artworkViewerComponent !== undefined) {
+    return Promise.resolve(artworkViewerComponent)
+  }
+
+  artworkViewerPromise ??= import(
+    '@/features/item-viewer/ArtworkViewer'
+  ).then(({ ArtworkViewer }) => {
+    artworkViewerComponent = ArtworkViewer
+    return ArtworkViewer
+  })
+
+  return artworkViewerPromise
+}
 
 function formatDate(createdAt: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, {
@@ -65,6 +77,10 @@ export function PortfolioItemPage() {
   ) as Pick<CardContent, 'info'>
   const imageButtonRef = useRef<HTMLButtonElement>(null)
   const [viewerOpen, setViewerOpen] = useState(false)
+  const [ArtworkViewer, setArtworkViewer] =
+    useState<ArtworkViewerComponent | null>(
+      artworkViewerComponent ?? null,
+    )
   const displayName = `${info.artist.firstName} ${info.artist.lastName}`
   const detailImage: ArtworkViewerImage = image
   const date =
@@ -75,7 +91,14 @@ export function PortfolioItemPage() {
   useDocumentTitle(`${item.title} — ${displayName}`)
 
   const preloadViewer = () => {
-    void import('@/features/item-viewer/ArtworkViewer')
+    void loadArtworkViewer()
+  }
+
+  const openViewer = () => {
+    void loadArtworkViewer().then((Viewer) => {
+      setArtworkViewer(() => Viewer)
+      setViewerOpen(true)
+    })
   }
 
   return (
@@ -89,7 +112,7 @@ export function PortfolioItemPage() {
           <Button
             aria-label={`View ${item.title} full screen`}
             className={styles.imageButton}
-            onClick={() => setViewerOpen(true)}
+            onClick={openViewer}
             onFocus={preloadViewer}
             onPointerEnter={preloadViewer}
             onPointerDown={preloadViewer}
@@ -104,6 +127,14 @@ export function PortfolioItemPage() {
               priority
               tier="detail"
             />
+            <Badge
+              className={styles.availabilityBadge}
+              variant={
+                item.availableForPurchase ? 'default' : 'secondary'
+              }
+            >
+              {item.availableForPurchase ? 'Available' : 'Sold'}
+            </Badge>
             <Badge className={styles.expandHint}>
               <ExpandIcon aria-hidden="true" data-icon="inline-start" />
               View full screen
@@ -150,28 +181,17 @@ export function PortfolioItemPage() {
         </div>
       </div>
 
-      {viewerOpen ? (
-        <Suspense
-          fallback={
-            <ArtworkViewerFallback
-              finalFocus={imageButtonRef}
-              image={image}
-              onClose={() => setViewerOpen(false)}
-              title={item.title}
-            />
-          }
-        >
-          <ArtworkViewer
-            closeImageLabel="Close full-screen image"
-            finalFocus={imageButtonRef}
-            images={[detailImage]}
-            labels={artworkViewerLabels}
-            onClose={() => setViewerOpen(false)}
-            onSelectImage={() => undefined}
-            selectedId={detailImage.id}
-            title={item.title}
-          />
-        </Suspense>
+      {viewerOpen && ArtworkViewer !== null ? (
+        <ArtworkViewer
+          closeImageLabel="Close full-screen image"
+          finalFocus={imageButtonRef}
+          images={[detailImage]}
+          labels={artworkViewerLabels}
+          onClose={() => setViewerOpen(false)}
+          onSelectImage={() => undefined}
+          selectedId={detailImage.id}
+          title={item.title}
+        />
       ) : null}
     </article>
   )

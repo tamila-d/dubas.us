@@ -18,7 +18,7 @@ function portfolioReturnTo(state: unknown): string | undefined {
   const value = (state as { portfolioReturnTo?: unknown })
     .portfolioReturnTo
   return typeof value === 'string' &&
-    /^\/portfolio(?:\?[^#]*)?$/.test(value)
+    /^\/originals(?:\?[^#]*)?$/.test(value)
     ? value
     : undefined
 }

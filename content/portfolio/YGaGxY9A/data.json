@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "YGaGxY9A",
-  "title": "New York Eleven",
-  "description": "A proud city pigeon poses in a blue basketball jersey, combining playful character with detailed watercolor portraiture.",
+  "title": "Knicks Pigeon",
+  "description": "Created to celebrate a big Knicks win, this playful watercolor combines two unmistakable New York icons—the Knicks and the city’s ever-present pigeon. A lighthearted tribute to the energy, pride, and personality that make New York, New York.",
   "location": "Madison Square Garden, New York",
   "createdAt": "2022-11-16",
   "type": "animals",
+  "availableForPurchase": true,
+  "commissioned": false,
   "image": "YGaGxY9A",
   "crop": {
     "x": 0,

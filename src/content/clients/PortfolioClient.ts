@@ -58,6 +58,8 @@ export class PortfolioClient {
           location: item.location,
           createdAt: item.createdAt,
           type: group,
+          availableForPurchase: item.availableForPurchase,
+          commissioned: item.commissioned,
           crop: item.crop,
           image: imageResourceToResponsiveData(image),
         }

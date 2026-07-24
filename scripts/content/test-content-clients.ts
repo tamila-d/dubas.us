@@ -108,6 +108,22 @@ try {
     'Portfolio filters must come from catalog groups',
   )
   assert.deepEqual(
+    portfolio.items
+      .filter((item) => item.availableForPurchase)
+      .map((item) => item.id)
+      .sort(),
+    ['FRP3sv9X', 'LCsu8yWv', 'RgDKYZ9v', 'YGaGxY9A'].sort(),
+    'Portfolio availability must come from authored item data',
+  )
+  assert.deepEqual(
+    portfolio.items
+      .filter((item) => item.commissioned)
+      .map((item) => item.id)
+      .sort(),
+    ['WbRVG7y4', 'kyQw7CXK'].sort(),
+    'Commissioned originals must remain identifiable for future filters',
+  )
+  assert.deepEqual(
     portfolio.items[0]?.image.card.sources.map((source) => source.width),
     [160, 240],
   )
@@ -145,7 +161,9 @@ try {
     'Portfolio client must preserve each authored thumbnail crop',
   )
   const item = await portfolioClient.getItem('RgDKYZ9v')
-  assert.equal(item.title, 'Neighborhood Kitchen')
+  assert.equal(item.title, 'Dutch baby')
+  assert.equal(item.availableForPurchase, true)
+  assert.equal(item.commissioned, false)
   assert.equal(item.image, 'RgDKYZ9v')
   assert.deepEqual(item.crop, { x: 0, y: 454, size: 1350 })
   assert.deepEqual(item.coordinates, {

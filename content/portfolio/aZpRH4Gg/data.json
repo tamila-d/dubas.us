@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "aZpRH4Gg",
-  "title": "Harbor at Sunset",
-  "description": "A working vessel rests in quiet blue water as soft coral and violet clouds gather over the harbor.",
+  "title": "The Baylander",
+  "description": "Once a working vessel, the Baylander has found new life as a floating bar and gathering place on the Hudson. Inspired by my favorite sunset view along the Hudson Greenway, this watercolor captures the warmth, reflection, and peaceful rhythm of summer evenings in New York.",
   "location": "Pier 86, Hudson River, New York",
   "createdAt": "2025-06-02",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "aZpRH4Gg",
   "crop": {
     "x": 0,

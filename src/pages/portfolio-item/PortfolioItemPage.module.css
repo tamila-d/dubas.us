@@ -53,6 +53,12 @@
   bottom: clamp(16px, 2vw, 24px);
 }
 
+.availabilityBadge {
+  position: absolute;
+  top: clamp(16px, 2vw, 24px);
+  right: clamp(16px, 2vw, 24px);
+}
+
 .copy {
   display: grid;
   align-content: start;

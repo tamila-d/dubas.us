@@ -25,7 +25,7 @@ export function PortfolioFilterButtons({
 }: PortfolioFilterButtonsProps) {
   return (
     <ButtonGroup
-      aria-label="Filter portfolio by type"
+      aria-label="Filter original art"
       className="w-full max-w-44"
       onFocus={onIntent}
       onPointerDown={onIntent}
@@ -46,7 +46,7 @@ export function PortfolioFilterButtons({
         <Button
           aria-expanded={expanded}
           aria-haspopup="menu"
-          aria-label="Choose portfolio category"
+          aria-label="Choose original art filter"
           className="w-(--touch-target) px-0"
           onClick={onOpen}
           size="touch"

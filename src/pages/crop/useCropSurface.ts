@@ -12,7 +12,7 @@ export function useCropSurface(surface: 'catalog' | 'editor'): void {
     html.dataset.pageSurface = surface === 'editor' ? 'crop' : 'content'
     themeColor?.setAttribute(
       'content',
-      surface === 'editor' ? '#171717' : '#ffffff',
+      surface === 'editor' ? '#171717' : '#f7f3ea',
     )
 
     return () => {

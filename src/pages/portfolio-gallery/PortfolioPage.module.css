@@ -68,11 +68,19 @@
 }
 
 .media {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--card);
+}
+
+.availabilityBadge {
+  position: absolute;
+  z-index: 1;
+  top: var(--space-3);
+  right: var(--space-3);
 }
 
 .picture,
@@ -148,7 +156,7 @@
   }
 }
 
-@media (min-width: 560px) {
+@media (min-width: 700px) {
   .filterMenu {
     display: none;
   }

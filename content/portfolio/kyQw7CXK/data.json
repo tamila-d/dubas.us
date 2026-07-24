@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "kyQw7CXK",
-  "title": "Gentle Guardian",
-  "description": "A tender portrait of a gray dog, rendered with an attentive gaze and soft washes of blue and warm earth tones.",
+  "title": "Ozzy, the Good Boy",
+  "description": "A commissioned portrait of Ozzy, capturing his curious expression and gentle personality. Painted in watercolor on hot-pressed paper, I focused on the subtle textures of his silky fur and the warmth in his attentive eyes.",
   "location": "New York, NY",
   "createdAt": "2024-09-05",
   "type": "animals",
+  "availableForPurchase": false,
+  "commissioned": true,
   "image": "kyQw7CXK",
   "crop": {
     "x": 0,

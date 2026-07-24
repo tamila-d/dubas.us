@@ -12,6 +12,8 @@ export interface PortfolioItemResource {
   location: string
   createdAt: string | null
   type: string
+  availableForPurchase: boolean
+  commissioned: boolean
   image: string
   crop: ImageCrop
   coordinates: PortfolioCoordinates
@@ -38,6 +40,8 @@ export interface PortfolioIndexEntry {
   location: string
   createdAt: string | null
   type: string
+  availableForPurchase: boolean
+  commissioned: boolean
   crop: ImageCrop
   image: ResponsiveImageData
 }
@@ -74,6 +78,13 @@ function string(value: unknown, path: string): string {
     return fail(path, 'a non-empty string')
   }
   return value.trim()
+}
+
+function boolean(value: unknown, path: string): boolean {
+  if (typeof value !== 'boolean') {
+    return fail(path, 'a boolean')
+  }
+  return value
 }
 
 function id(value: unknown, path: string): string {
@@ -213,6 +224,14 @@ export function validatePortfolioItemResource(
       'portfolioItem.createdAt',
     ),
     type: group(input.type, 'portfolioItem.type'),
+    availableForPurchase: boolean(
+      input.availableForPurchase,
+      'portfolioItem.availableForPurchase',
+    ),
+    commissioned: boolean(
+      input.commissioned,
+      'portfolioItem.commissioned',
+    ),
     image: id(input.image, 'portfolioItem.image'),
     crop: crop(input.crop, 'portfolioItem.crop'),
     coordinates: coordinates(

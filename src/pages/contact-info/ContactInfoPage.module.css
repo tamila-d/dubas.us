@@ -55,6 +55,7 @@
 .contactList {
   display: grid;
   gap: var(--space-3);
+  background: var(--card);
 }
 
 .contactLink {
@@ -62,8 +63,14 @@
   min-width: 0;
   justify-content: flex-start;
   overflow: hidden;
+  background: var(--card);
   text-decoration: none;
   text-overflow: ellipsis;
+}
+
+.contactLink:hover {
+  color: var(--primary);
+  background: var(--card);
 }
 
 .profileHeader {
@@ -90,12 +97,17 @@
 }
 
 .saveDescription {
-  color: var(--muted-foreground);
+  color: var(--foreground);
   line-height: 1.65;
 }
 
 .downloadButton {
   width: 100%;
+  box-shadow: none;
+}
+
+.saveFooter {
+  background: var(--card);
 }
 
 @media (min-width: 900px) {

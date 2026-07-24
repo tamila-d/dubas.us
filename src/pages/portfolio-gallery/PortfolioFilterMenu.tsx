@@ -38,7 +38,7 @@ export function PortfolioFilterMenu({
           <DropdownMenuTrigger
             render={
               <Button
-                aria-label="Choose portfolio category"
+                aria-label="Choose portfolio filter"
                 className="w-(--touch-target) px-0"
                 size="touch"
                 type="button"

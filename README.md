@@ -12,7 +12,7 @@ npm run dev -- --host 0.0.0.0
 ```
 
 The digital business card is available at `/card`, the artwork catalog at
-`/portfolio`, and contact details at `/contact`. Visiting `/` opens the card
+`/originals`, and contact details at `/contact`. Visiting `/` opens the card
 through React Router.
 
 ## Interaction design

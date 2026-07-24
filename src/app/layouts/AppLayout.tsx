@@ -44,7 +44,7 @@ export function AppLayout() {
       profilePage ? 'profile' : 'content'
     document
       .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-      ?.setAttribute('content', profilePage ? '#f5f5f5' : '#ffffff')
+      ?.setAttribute('content', '#f7f3ea')
   }, [info.locale, profilePage])
 
   return (
@@ -60,7 +60,7 @@ export function AppLayout() {
         id={mainContentId}
       >
         {pendingPortfolio ? (
-          <CatalogPageSkeleton label="Loading portfolio…" />
+          <CatalogPageSkeleton label="Loading original art…" />
         ) : pendingPortfolioItem ? (
           <ItemDetailSkeleton label="Loading artwork…" />
         ) : (

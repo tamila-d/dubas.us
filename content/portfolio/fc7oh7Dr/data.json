@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "fc7oh7Dr",
-  "title": "Guiding Light",
-  "description": "A red lighthouse stands firmly on the rocks, surrounded by open water and a luminous, windswept sky.",
+  "title": "The little red lighthouse",
+  "description": "Nestled beneath the George Washington Bridge, the Little Red Lighthouse has long been one of my favorite landmarks in Washington Heights. I wanted to capture its warmth and resilience as it continues to watch over the Hudson River as the city’s last lighthouse.",
   "location": "Little Red Lighthouse, New York",
   "createdAt": "2023-03-12",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "fc7oh7Dr",
   "crop": {
     "x": 0,

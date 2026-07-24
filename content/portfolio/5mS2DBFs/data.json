@@ -1,11 +1,13 @@
 {
   "schemaVersion": 1,
   "id": "5mS2DBFs",
-  "title": "Among the Cypress Trees",
-  "description": "A historic church complex rises above lush greenery beneath a light blue sky, evoking the calm of an old European town.",
+  "title": "The Met cloisters",
+  "description": "The Met Cloisters has always fascinated me with its medieval charm. Every visit feels like stepping into another century, where stone walls, gardens, and timeless architecture create a peaceful escape from the city.",
   "location": "Abbazia di Sant’Antimo, Tuscany, Italy",
   "createdAt": "2021-05-18",
   "type": "places",
+  "availableForPurchase": false,
+  "commissioned": false,
   "image": "5mS2DBFs",
   "crop": {
     "x": 215,
