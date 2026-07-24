@@ -5,7 +5,6 @@ import {
   useState,
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
-  type RefObject,
   type WheelEvent as ReactWheelEvent,
 } from 'react'
 import {
@@ -91,7 +90,9 @@ export function useArtworkViewerGestures({
   onNext,
   onPrevious,
 }: UseArtworkViewerGesturesOptions) {
-  const stageRef = useRef<HTMLDivElement>(null)
+  const stageElementRef = useRef<HTMLDivElement>(null)
+  const [stageElement, setStageElement] =
+    useState<HTMLDivElement | null>(null)
   const [transform, setTransform] = useState(INITIAL_TRANSFORM)
   const transformRef = useRef(transform)
   const pointersRef = useRef(new Map<number, TrackedPointer>())
@@ -102,9 +103,13 @@ export function useArtworkViewerGestures({
   transformRef.current = transform
   const imageWidth = imageSize.width
   const imageHeight = imageSize.height
+  const stageRef = useCallback((element: HTMLDivElement | null) => {
+    stageElementRef.current = element
+    setStageElement(element)
+  }, [])
 
   const viewportSize = useCallback((): ViewerSize => {
-    const rect = stageRef.current?.getBoundingClientRect()
+    const rect = stageElementRef.current?.getBoundingClientRect()
     return {
       width: rect?.width ?? 0,
       height: rect?.height ?? 0,
@@ -132,7 +137,7 @@ export function useArtworkViewerGestures({
 
   const pointFromStageCenter = useCallback(
     (point: ViewerPoint): ViewerPoint => {
-      const rect = stageRef.current?.getBoundingClientRect()
+      const rect = stageElementRef.current?.getBoundingClientRect()
       if (rect === undefined) {
         return { x: 0, y: 0 }
       }
@@ -181,8 +186,7 @@ export function useArtworkViewerGestures({
   }, [resetKey, resetZoom])
 
   useEffect(() => {
-    const stage = stageRef.current
-    if (stage === null || typeof ResizeObserver === 'undefined') {
+    if (stageElement === null || typeof ResizeObserver === 'undefined') {
       return
     }
 
@@ -194,9 +198,9 @@ export function useArtworkViewerGestures({
         ),
       )
     })
-    observer.observe(stage)
+    observer.observe(stageElement)
     return () => observer.disconnect()
-  }, [commitTransform, transformAtScale])
+  }, [commitTransform, stageElement, transformAtScale])
 
   const startSingleGesture = useCallback(
     (
@@ -393,11 +397,11 @@ export function useArtworkViewerGestures({
   )
 
   useEffect(() => {
-    const stage = stageRef.current
-    if (stage === null || typeof TouchEvent === 'undefined') {
+    if (stageElement === null || typeof TouchEvent === 'undefined') {
       return
     }
 
+    const stage = stageElement
     usingNativeTouchEventsRef.current = true
 
     const syncTouches = (touches: TouchList) => {
@@ -542,6 +546,7 @@ export function useArtworkViewerGestures({
     completeSingleGesture,
     movePinchGesture,
     moveSingleGesture,
+    stageElement,
     startPinchGesture,
     startSingleGesture,
   ])
@@ -627,7 +632,7 @@ export function useArtworkViewerGestures({
     onWheel,
     resetZoom,
     scale: transform.scale,
-    stageRef: stageRef as RefObject<HTMLDivElement>,
+    stageRef,
     transform,
     zoomIn,
     zoomOut,
