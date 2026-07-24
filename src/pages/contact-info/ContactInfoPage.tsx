@@ -176,9 +176,12 @@ export function ContactInfoPage() {
             </CardHeader>
             <CardContent>
               <p className={styles.saveDescription}>
-                I paint city scenes, animals, and the small moments that
-                make a place feel personal. Keep my details close, and feel
-                free to reach out about an original or a future commission.
+                Hi! My name is Tamila Dubas. As a self-taught Ukrainian
+                watercolor artist living in Washington Heights, I find
+                inspiration in the beauty of everyday places. My paintings
+                are a collection of moments from my neighborhood and
+                travels, captured with the hope that they evoke a sense of
+                nostalgia and connection.
               </p>
             </CardContent>
             <CardFooter className={styles.saveFooter}>
