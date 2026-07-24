@@ -45,6 +45,7 @@ interface TapRecord extends ViewerPoint {
 interface UseArtworkViewerGesturesOptions {
   imageSize: ViewerSize
   resetKey: string
+  onInteraction: () => void
   onNext: () => void
   onPrevious: () => void
 }
@@ -87,6 +88,7 @@ function midpoint(left: ViewerPoint, right: ViewerPoint): ViewerPoint {
 export function useArtworkViewerGestures({
   imageSize,
   resetKey,
+  onInteraction,
   onNext,
   onPrevious,
 }: UseArtworkViewerGesturesOptions) {
@@ -416,6 +418,7 @@ export function useArtworkViewerGestures({
 
     const handleTouchStart = (event: TouchEvent) => {
       event.preventDefault()
+      onInteraction()
       syncTouches(event.touches)
 
       const current = [...pointersRef.current.entries()]
@@ -429,6 +432,7 @@ export function useArtworkViewerGestures({
 
     const handleTouchMove = (event: TouchEvent) => {
       event.preventDefault()
+      onInteraction()
       syncTouches(event.touches)
 
       if (movePinchGesture()) {
@@ -443,6 +447,7 @@ export function useArtworkViewerGestures({
 
     const finishTouch = (event: TouchEvent, cancelled: boolean) => {
       event.preventDefault()
+      onInteraction()
       const single = singleGestureRef.current
       if (single !== null && pointersRef.current.size === 1) {
         for (
@@ -546,6 +551,7 @@ export function useArtworkViewerGestures({
     completeSingleGesture,
     movePinchGesture,
     moveSingleGesture,
+    onInteraction,
     stageElement,
     startPinchGesture,
     startSingleGesture,

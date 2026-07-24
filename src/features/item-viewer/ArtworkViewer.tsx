@@ -102,14 +102,15 @@ export function ArtworkViewer({
     () => selectByOffset(-1),
     [selectByOffset],
   )
+  const controls = useViewerControlsVisibility({
+    resetKey: selected.id,
+  })
   const gestures = useArtworkViewerGestures({
     imageSize: { width: selected.width, height: selected.height },
     resetKey: selected.id,
+    onInteraction: controls.revealControls,
     onNext: selectNext,
     onPrevious: selectPrevious,
-  })
-  const controls = useViewerControlsVisibility({
-    resetKey: selected.id,
   })
   const zoomKey = `${selected.id}:${zoomAttempt}`
   const zoomReady =
