@@ -149,7 +149,10 @@ function PortfolioItemContent({
       </div>
 
       <div className={styles.layout}>
-        <div className={styles.artworkSurface}>
+        <div
+          className={styles.artworkSurface}
+          style={{ aspectRatio: `${image.width} / ${image.height}` }}
+        >
           <Button
             aria-label={`View ${item.title} full screen`}
             className={styles.imageButton}

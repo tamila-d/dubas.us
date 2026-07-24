@@ -22,52 +22,12 @@ function eventPromise(
   })
 }
 
-function decodeImage(image: HTMLImageElement): Promise<void> {
-  if (typeof image.decode !== 'function' || image.naturalWidth === 0) {
-    return Promise.resolve()
-  }
-
-  return image.decode().catch(() => undefined)
-}
-
-function imageReady(
-  image: HTMLImageElement,
-  signal: AbortSignal,
-): Promise<void> {
-  if (image.complete) {
-    return decodeImage(image)
-  }
-
-  return Promise.race([
-    eventPromise(image, 'load', signal),
-    eventPromise(image, 'error', signal),
-  ]).then(() => decodeImage(image))
-}
-
-async function appImagesReady(signal: AbortSignal): Promise<void> {
-  await Promise.all(
-    Array.from(
-      document.querySelectorAll<HTMLImageElement>(
-        '#root img:not([loading="lazy"])',
-      ),
-    ).map((image) => imageReady(image, signal)),
-  )
-}
-
-export function AppBootReady({
-  waitForImages = true,
-}: {
-  waitForImages?: boolean
-} = {}) {
+export function AppBootReady() {
   useEffect(() => {
     const controller = new AbortController()
     const { signal } = controller
     let cancelReveal: (() => void) | undefined
     let resourceDeadline: number | undefined
-    const windowReady =
-      document.readyState === 'complete'
-        ? Promise.resolve()
-        : eventPromise(window, 'load', signal)
     const stylesReady = Promise.all(
       Array.from(
         document.querySelectorAll<HTMLLinkElement>(
@@ -82,9 +42,6 @@ export function AppBootReady({
             ]),
       ),
     )
-    const imagesReady = waitForImages
-      ? appImagesReady(signal)
-      : Promise.resolve()
     const fontsReady = stylesReady.then(() => document.fonts.ready)
 
     const finishBoot = () => {
@@ -100,12 +57,7 @@ export function AppBootReady({
       finishBoot,
       maximumResourceWaitMs,
     )
-    void Promise.all([
-      windowReady,
-      stylesReady,
-      imagesReady,
-      fontsReady,
-    ]).then(finishBoot)
+    void Promise.all([stylesReady, fontsReady]).then(finishBoot)
 
     return () => {
       if (resourceDeadline !== undefined) {
@@ -114,7 +66,7 @@ export function AppBootReady({
       controller.abort()
       cancelReveal?.()
     }
-  }, [waitForImages])
+  }, [])
 
   return null
 }

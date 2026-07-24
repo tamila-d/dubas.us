@@ -72,7 +72,7 @@ export function CropGalleryPage() {
           ))}
         </ul>
       </div>
-      <AppBootReady waitForImages={false} />
+      <AppBootReady />
     </main>
   )
 }
