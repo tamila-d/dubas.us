@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type MouseEvent as ReactMouseEvent,
@@ -14,7 +15,6 @@ import {
   clampViewerScale,
   viewerPanForPinch,
   viewerScaleFromWheel,
-  viewerSwipeDirection,
   type ViewerPoint,
   type ViewerSize,
   type ViewerTransform,
@@ -28,7 +28,6 @@ interface SinglePointerGesture {
   pointerId: number
   start: ViewerPoint
   last: ViewerPoint
-  startedAt: number
   pointerType: string
 }
 
@@ -46,8 +45,6 @@ interface UseArtworkViewerGesturesOptions {
   imageSize: ViewerSize
   resetKey: string
   onInteraction: () => void
-  onNext: () => void
-  onPrevious: () => void
 }
 
 const INITIAL_TRANSFORM: ViewerTransform = {
@@ -89,8 +86,6 @@ export function useArtworkViewerGestures({
   imageSize,
   resetKey,
   onInteraction,
-  onNext,
-  onPrevious,
 }: UseArtworkViewerGesturesOptions) {
   const stageElementRef = useRef<HTMLDivElement>(null)
   const [stageElement, setStageElement] =
@@ -179,7 +174,7 @@ export function useArtworkViewerGestures({
     setScale(2)
   }, [resetZoom, setScale])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     resetZoom()
     pointersRef.current.clear()
     singleGestureRef.current = null
@@ -205,16 +200,11 @@ export function useArtworkViewerGestures({
   }, [commitTransform, stageElement, transformAtScale])
 
   const startSingleGesture = useCallback(
-    (
-      pointerId: number,
-      point: TrackedPointer,
-      startedAt = Date.now(),
-    ) => {
+    (pointerId: number, point: TrackedPointer) => {
       singleGestureRef.current = {
         pointerId,
         start: point,
         last: point,
-        startedAt,
         pointerType: point.pointerType,
       }
     },
@@ -227,6 +217,7 @@ export function useArtworkViewerGestures({
       pinchGestureRef.current = null
       return
     }
+    lastTapRef.current = null
     pinchGestureRef.current = {
       distance: Math.max(distance(points[0], points[1]), 1),
       midpoint: midpoint(points[0], points[1]),
@@ -270,9 +261,16 @@ export function useArtworkViewerGestures({
       const single = singleGestureRef.current
       if (
         pointersRef.current.size !== 1 ||
-        single?.pointerId !== pointerId ||
-        transformRef.current.scale <= VIEWER_MIN_SCALE
+        single?.pointerId !== pointerId
       ) {
+        return false
+      }
+
+      if (distance(single.start, point) >= 8) {
+        lastTapRef.current = null
+      }
+
+      if (transformRef.current.scale <= VIEWER_MIN_SCALE) {
         return false
       }
 
@@ -373,29 +371,19 @@ export function useArtworkViewerGestures({
       if (
         cancelled ||
         pointersRef.current.size !== 1 ||
-        single?.pointerId !== pointerId ||
-        transformRef.current.scale !== VIEWER_MIN_SCALE
+        single?.pointerId !== pointerId
       ) {
         return
       }
 
-      const swipe = viewerSwipeDirection(
-        single.start,
-        point,
-        Date.now() - single.startedAt,
-      )
-      if (swipe === 'next') {
-        onNext()
-      } else if (swipe === 'previous') {
-        onPrevious()
-      } else if (
+      if (
         single.pointerType === 'touch' &&
         distance(single.start, point) < 8
       ) {
         handleTouchTap(point)
       }
     },
-    [handleTouchTap, onNext, onPrevious],
+    [handleTouchTap],
   )
 
   useEffect(() => {

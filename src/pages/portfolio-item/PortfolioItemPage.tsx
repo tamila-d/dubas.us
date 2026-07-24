@@ -12,17 +12,11 @@ import {
   useLoaderData,
   useRouteLoaderData,
 } from 'react-router-dom'
+import { ArtworkViewerFallback } from '@/components/loading/ArtworkViewerFallback'
 import { ResponsiveImage } from '@/components/media/ResponsiveImage'
 import { PortfolioBackButton } from '@/components/navigation/PortfolioBackButton'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { APP_ROUTE_IDS } from '@/config/routes'
 import type { CardContent } from '@/content/card-types'
@@ -32,8 +26,8 @@ import type {
 } from '@/content/portfolio-resource'
 import type {
   ArtworkViewerImage,
-  ImageViewerLabels,
 } from '@/features/item-viewer/viewer-contract'
+import { artworkViewerLabels } from '@/features/item-viewer/viewer-contract'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { cn } from '@/lib/utils'
 import styles from './PortfolioItemPage.module.css'
@@ -43,18 +37,6 @@ const ArtworkViewer = lazy(() =>
     ({ ArtworkViewer }) => ({ default: ArtworkViewer }),
   ),
 )
-
-const viewerLabels: ImageViewerLabels = {
-  previousImage: 'Previous image',
-  nextImage: 'Next image',
-  zoomIn: 'Zoom in',
-  zoomOut: 'Zoom out',
-  resetZoom: 'Reset zoom',
-  imagePosition: 'Image {current} of {total}',
-  zoomLevel: 'Zoom {percent}%',
-  zoomUnavailable: 'The larger image could not be loaded.',
-  retryZoom: 'Try again',
-}
 
 function formatDate(createdAt: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, {
@@ -73,41 +55,6 @@ function formatType(type: string): string {
 function mapUrl(item: PortfolioItemResource): string {
   const query = `${item.coordinates.latitude},${item.coordinates.longitude}`
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
-}
-
-function ViewerFallback({
-  image,
-  onClose,
-  title,
-}: {
-  image: PortfolioItemDetailResource['image']
-  onClose: () => void
-  title: string
-}) {
-  return (
-    <Dialog
-      open
-      onOpenChange={(open) => {
-        if (!open) onClose()
-      }}
-    >
-      <DialogContent className={styles.viewerFallback}>
-        <DialogHeader className="sr-only">
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-            Preparing the full-screen artwork viewer.
-          </DialogDescription>
-        </DialogHeader>
-        <ResponsiveImage
-          className={styles.viewerFallbackImage}
-          image={image}
-          pictureClassName={styles.viewerFallbackPicture}
-          priority
-          tier="detail"
-        />
-      </DialogContent>
-    </Dialog>
-  )
 }
 
 export function PortfolioItemPage() {
@@ -206,7 +153,8 @@ export function PortfolioItemPage() {
       {viewerOpen ? (
         <Suspense
           fallback={
-            <ViewerFallback
+            <ArtworkViewerFallback
+              finalFocus={imageButtonRef}
               image={image}
               onClose={() => setViewerOpen(false)}
               title={item.title}
@@ -217,7 +165,7 @@ export function PortfolioItemPage() {
             closeImageLabel="Close full-screen image"
             finalFocus={imageButtonRef}
             images={[detailImage]}
-            labels={viewerLabels}
+            labels={artworkViewerLabels}
             onClose={() => setViewerOpen(false)}
             onSelectImage={() => undefined}
             selectedId={detailImage.id}

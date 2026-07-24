@@ -1,12 +1,14 @@
 import {
   useCallback,
   useEffect,
+  useRef,
   useState,
   type KeyboardEvent,
   type RefObject,
   type SyntheticEvent,
 } from 'react'
 import {
+  ArrowUpRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   MinusIcon,
@@ -16,6 +18,12 @@ import {
 } from 'lucide-react'
 import { ResponsiveImage } from '@/components/media/ResponsiveImage'
 import { Button } from '@/components/ui/button'
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel'
 import {
   Dialog,
   DialogContent,
@@ -41,9 +49,10 @@ import styles from './ArtworkViewer.module.css'
 interface ArtworkViewerProps {
   closeImageLabel: string
   finalFocus?: RefObject<HTMLElement | null>
-  images: ArtworkViewerImage[]
+  images: readonly ArtworkViewerImage[]
   labels: ImageViewerLabels
   onClose: () => void
+  onOpenDetails?: (imageId: string) => void
   onSelectImage: (imageId: string) => void
   selectedId: string
   title: string
@@ -69,6 +78,7 @@ export function ArtworkViewer({
   images,
   labels,
   onClose,
+  onOpenDetails,
   onSelectImage,
   selectedId,
   title,
@@ -78,6 +88,8 @@ export function ArtworkViewer({
     images.findIndex((image) => image.id === selectedId),
   )
   const selected = images[selectedIndex]
+  const initialIndex = useRef(selectedIndex)
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>()
   const [zoomAttempt, setZoomAttempt] = useState(0)
   const [zoomState, setZoomState] = useState<ZoomState>({
     key: '',
@@ -85,6 +97,15 @@ export function ArtworkViewer({
   })
   const selectByOffset = useCallback(
     (offset: number) => {
+      if (carouselApi !== undefined) {
+        if (offset > 0) {
+          carouselApi.scrollNext()
+        } else {
+          carouselApi.scrollPrev()
+        }
+        return
+      }
+
       const nextIndex =
         (selectedIndex + offset + images.length) % images.length
       const next = images[nextIndex]
@@ -92,7 +113,7 @@ export function ArtworkViewer({
         onSelectImage(next.id)
       }
     },
-    [images, onSelectImage, selectedIndex],
+    [carouselApi, images, onSelectImage, selectedIndex],
   )
   const selectNext = useCallback(
     () => selectByOffset(1),
@@ -109,9 +130,13 @@ export function ArtworkViewer({
     imageSize: { width: selected.width, height: selected.height },
     resetKey: selected.id,
     onInteraction: controls.revealControls,
-    onNext: selectNext,
-    onPrevious: selectPrevious,
   })
+  const isZoomedRef = useRef(gestures.isZoomed)
+  isZoomedRef.current = gestures.isZoomed
+  const watchCarouselDrag = useCallback(
+    () => !isZoomedRef.current,
+    [],
+  )
   const zoomKey = `${selected.id}:${zoomAttempt}`
   const zoomReady =
     zoomState.key === zoomKey && zoomState.status === 'ready'
@@ -123,6 +148,33 @@ export function ArtworkViewer({
     images.length,
   )
   const zoomLevel = formatViewerZoom(labels.zoomLevel, gestures.scale)
+
+  useEffect(() => {
+    if (carouselApi === undefined) {
+      return
+    }
+
+    const syncSelectedImage = () => {
+      const next = images[carouselApi.selectedScrollSnap()]
+      if (next !== undefined && next.id !== selectedId) {
+        onSelectImage(next.id)
+      }
+    }
+
+    carouselApi.on('select', syncSelectedImage)
+    return () => {
+      carouselApi.off('select', syncSelectedImage)
+    }
+  }, [carouselApi, images, onSelectImage, selectedId])
+
+  useEffect(() => {
+    if (
+      carouselApi !== undefined &&
+      carouselApi.selectedScrollSnap() !== selectedIndex
+    ) {
+      carouselApi.scrollTo(selectedIndex, true)
+    }
+  }, [carouselApi, selectedIndex])
 
   useEffect(() => {
     const preloads = neighborIndexes(selectedIndex, images.length).map(
@@ -154,9 +206,14 @@ export function ArtworkViewer({
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     controls.keepControlsVisible()
-    if (shouldPreserveBrowserZoom(event)) return
+    if (event.defaultPrevented || shouldPreserveBrowserZoom(event)) {
+      return
+    }
 
-    if (event.key === 'ArrowLeft' && images.length > 1) {
+    if (
+      event.key === 'ArrowLeft' &&
+      images.length > 1
+    ) {
       event.preventDefault()
       selectPrevious()
     } else if (event.key === 'ArrowRight' && images.length > 1) {
@@ -220,41 +277,79 @@ export function ArtworkViewer({
           role="group"
           tabIndex={0}
         >
-          <div
-            className={styles.surface}
-            style={{
-              transform: `translate3d(${gestures.transform.x}px, ${gestures.transform.y}px, 0) scale(${gestures.scale})`,
+          <Carousel
+            aria-label={title}
+            className={styles.carousel}
+            opts={{
+              align: 'start',
+              dragThreshold: 8,
+              duration: 24,
+              loop: images.length > 1,
+              startIndex: initialIndex.current,
+              watchDrag: watchCarouselDrag,
             }}
+            setApi={setCarouselApi}
           >
-            <ResponsiveImage
-              className={styles.image}
-              draggable={false}
-              image={selected}
-              pictureClassName={styles.picture}
-              priority
-              tier="detail"
-            />
-            {gestures.isZoomed && !zoomFailed ? (
-              <ResponsiveImage
-                aria-hidden="true"
-                className={styles.image}
-                draggable={false}
-                image={selected}
-                key={zoomKey}
-                onError={() =>
-                  setZoomState({ key: zoomKey, status: 'error' })
-                }
-                onLoad={handleZoomLoad}
-                pictureClassName={
-                  zoomReady
-                    ? `${styles.picture} ${styles.zoomReady}`
-                    : `${styles.picture} ${styles.zoomPicture}`
-                }
-                priority
-                tier="zoom"
-              />
-            ) : null}
-          </div>
+            <CarouselContent className={styles.carouselTrack}>
+              {images.map((image, index) => {
+                const isSelected = index === selectedIndex
+
+                return (
+                  <CarouselItem
+                    aria-hidden={isSelected ? undefined : true}
+                    aria-label={`${index + 1} / ${images.length}`}
+                    className={styles.carouselSlide}
+                    key={image.id}
+                  >
+                    <div
+                      className={styles.surface}
+                      style={
+                        isSelected
+                          ? {
+                              transform: `translate3d(${gestures.transform.x}px, ${gestures.transform.y}px, 0) scale(${gestures.scale})`,
+                            }
+                          : undefined
+                      }
+                    >
+                      <ResponsiveImage
+                        className={styles.image}
+                        draggable={false}
+                        image={image}
+                        pictureClassName={styles.picture}
+                        priority={isSelected}
+                        tier="detail"
+                      />
+                      {isSelected &&
+                      gestures.isZoomed &&
+                      !zoomFailed ? (
+                        <ResponsiveImage
+                          aria-hidden="true"
+                          className={styles.image}
+                          draggable={false}
+                          image={image}
+                          key={zoomKey}
+                          onError={() =>
+                            setZoomState({
+                              key: zoomKey,
+                              status: 'error',
+                            })
+                          }
+                          onLoad={handleZoomLoad}
+                          pictureClassName={
+                            zoomReady
+                              ? `${styles.picture} ${styles.zoomReady}`
+                              : `${styles.picture} ${styles.zoomPicture}`
+                          }
+                          priority
+                          tier="zoom"
+                        />
+                      ) : null}
+                    </div>
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+          </Carousel>
         </div>
 
         <Button
@@ -308,35 +403,54 @@ export function ArtworkViewer({
             </div>
           ) : null}
 
-          <div className={styles.controlGroup}>
-            <Button
-              aria-keyshortcuts="-"
-              aria-label={labels.zoomOut}
-              disabled={gestures.scale <= VIEWER_MIN_SCALE}
-              onClick={gestures.zoomOut}
-              size="icon-lg"
+          {images.length === 1 ? (
+            <div className={styles.controlGroup}>
+              <Button
+                aria-keyshortcuts="-"
+                aria-label={labels.zoomOut}
+                disabled={gestures.scale <= VIEWER_MIN_SCALE}
+                onClick={gestures.zoomOut}
+                size="icon-lg"
+              >
+                <MinusIcon aria-hidden="true" />
+              </Button>
+              <Button
+                aria-keyshortcuts="+ ="
+                aria-label={labels.zoomIn}
+                disabled={gestures.scale >= VIEWER_MAX_SCALE}
+                onClick={gestures.zoomIn}
+                size="icon-lg"
+              >
+                <PlusIcon aria-hidden="true" />
+              </Button>
+              <Button
+                aria-keyshortcuts="0"
+                aria-label={labels.resetZoom}
+                disabled={!gestures.isZoomed}
+                onClick={gestures.resetZoom}
+                size="icon-lg"
+              >
+                <RotateCcwIcon aria-hidden="true" />
+              </Button>
+            </div>
+          ) : onOpenDetails === undefined ? null : (
+            <div
+              className={`${styles.controlGroup} ${styles.detailsGroup}`}
             >
-              <MinusIcon aria-hidden="true" />
-            </Button>
-            <Button
-              aria-keyshortcuts="+ ="
-              aria-label={labels.zoomIn}
-              disabled={gestures.scale >= VIEWER_MAX_SCALE}
-              onClick={gestures.zoomIn}
-              size="icon-lg"
-            >
-              <PlusIcon aria-hidden="true" />
-            </Button>
-            <Button
-              aria-keyshortcuts="0"
-              aria-label={labels.resetZoom}
-              disabled={!gestures.isZoomed}
-              onClick={gestures.resetZoom}
-              size="icon-lg"
-            >
-              <RotateCcwIcon aria-hidden="true" />
-            </Button>
-          </div>
+              <Button
+                className={styles.detailsButton}
+                onClick={() => onOpenDetails(selected.id)}
+                size="touch"
+                type="button"
+              >
+                View details
+                <ArrowUpRightIcon
+                  aria-hidden="true"
+                  data-icon="inline-end"
+                />
+              </Button>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -17,6 +17,18 @@ export interface ImageViewerLabels {
   retryZoom: string
 }
 
+export const artworkViewerLabels: ImageViewerLabels = {
+  previousImage: 'Previous image',
+  nextImage: 'Next image',
+  zoomIn: 'Zoom in',
+  zoomOut: 'Zoom out',
+  resetZoom: 'Reset zoom',
+  imagePosition: 'Image {current} of {total}',
+  zoomLevel: 'Zoom {percent}%',
+  zoomUnavailable: 'The larger image could not be loaded.',
+  retryZoom: 'Try again',
+}
+
 export function formatViewerPosition(
   template: string,
   current: number,
